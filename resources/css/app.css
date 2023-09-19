@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* global-style */
+
+.global_background {
+    @apply bg-gray-100
+}
+
+.sidebar {
+    @apply bg-gray-800 dark:bg-gray-200 text-white
+}
+
+.sidebar-text {
+    
+}
