@@ -21,7 +21,7 @@
 }
 
 .table-1 > thead th {
-    @apply px-6 py-3 lowercase
+    @apply py-3 lowercase text-center pl-3
 }
 
 .table-1 > tbody tr {
@@ -29,5 +29,5 @@
 }
 
 .table-1 > tbody td {
-    @apply px-6 py-4 text-base
+    @apply py-3 text-base text-left pl-3
 }

@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-// use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index() {
-        $request = request()->all();
-        $users = User::all();
+    public function index(Request $request) {
+        $limit = $request->query('limit');
+        $search = $request->query('search');
+
+        $users = User
+            ::where('username','LIKE',"%{$search}%")
+            ->limit($limit)
+            ->get();
 
         return Inertia::render('UserManagement/Index', [
-            'filters' => $request,
-            'users' => $users
+            'users' => $users,
         ]);
     }
 }
