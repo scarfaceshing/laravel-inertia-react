@@ -12,6 +12,22 @@
     @apply bg-gray-800 dark:bg-gray-200 text-white
 }
 
-.sidebar-text {
-    
+.table-1 {
+    @apply w-full text-sm text-left text-gray-500 dark:text-gray-400
+}
+
+.table-1 > thead {
+    @apply text-base text-white uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400
+}
+
+.table-1 > thead th {
+    @apply px-6 py-3 lowercase
+}
+
+.table-1 > tbody tr {
+    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700
+}
+
+.table-1 > tbody td {
+    @apply px-6 py-4 text-base
 }
