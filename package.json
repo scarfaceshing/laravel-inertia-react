@@ -6,7 +6,8 @@
         "build": "vite build",
         "lint": "eslint --fix .",
         "format": "prettier 'resources/{js,jsx}/**/*.{js,jsx}' --write",
-        "pre-commit": "npm run format && lint-staged && pretty-quick --staged"
+        "pre-commit": "npm run format && lint-staged && pretty-quick --staged",
+        "docker": "./laradock.sh up"
     },
     "devDependencies": {
         "@headlessui/react": "^1.4.2",
@@ -34,5 +35,9 @@
     },
     "lint-staged": {
         "*.js": "eslint --cache --fix"
+    },
+    "dependencies": {
+        "@inertiajs/inertia-react": "^0.8.1",
+        "dayjs": "^1.11.10"
     }
 }

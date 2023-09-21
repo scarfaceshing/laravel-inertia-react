@@ -1,7 +1,7 @@
 import MainLayout from '@/Layouts/MainLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Dashboard(props) {
+export default function Index(props) {
   return (
     <MainLayout auth={props.auth} errors={props.errors}>
       <Head title="Dashboard" />

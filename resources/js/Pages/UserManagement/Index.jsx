@@ -1,9 +1,11 @@
-import MainLayout from '@/Layouts/MainLayout';
-import DynamicTable from '@/Components/DynamicTable';
-import { Head, router } from '@inertiajs/react';
+import { formatDate } from '@/utils';
+import { Head, Link, router } from '@inertiajs/react';
+import { InertiaLink, usePage } from '@inertiajs/inertia-react';
 import { useEffect, useState } from 'react';
+import DynamicTable from '@/Components/DynamicTable';
+import MainLayout from '@/Layouts/MainLayout';
 
-export default function UserManagement(props) {
+export default function Index(props) {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -12,12 +14,34 @@ export default function UserManagement(props) {
       {
         search: search,
         limit: 10,
+        sort: 'id',
+        orderBy: 'ASC',
       },
       { preserveState: true }
     );
   }, [search]);
 
+  function sortColumn(sortBy, orderBy) {
+    router.get(
+      '/user-management',
+      {
+        search: search,
+        limit: 10,
+        sortBy: sortBy,
+        orderBy: orderBy,
+      },
+      { preserveState: true }
+    );
+  }
+
   const test = [
+    {
+      column: '',
+      name: '#',
+      mutate: (value, index) => {
+        return index + 1;
+      },
+    },
     {
       column: 'username',
       name: 'Username',
@@ -33,10 +57,23 @@ export default function UserManagement(props) {
     {
       column: 'email_verified_at',
       name: 'Verified at',
+      mutate: value => {
+        return formatDate(value);
+      },
     },
     {
       column: 'created_at',
       name: 'Created at',
+      mutate: value => {
+        return formatDate(value);
+      },
+    },
+    {
+      column: 'id',
+      name: 'Action',
+      mutate: id => {
+        return <Link href={route('user-management.edit', id)}>Edit {id}</Link>;
+      },
     },
   ];
 
@@ -44,24 +81,26 @@ export default function UserManagement(props) {
     <MainLayout auth={props.auth} errors={props.errors}>
       <Head title="User Management" />
       <div>
-        <div>
-          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <h1 className="text-3xl p-6 text-gray-900">
-              User Management {props.paramValue}
-            </h1>
-          </div>
+        <div className="pb-5">
+          <h1 className="text-3xl text-gray-900">User Management</h1>
         </div>
         <div>
-          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div>
+          <div className="bg-white p-2 rounded-lg">
+            <div className="pb-5">
               <input
                 type="text"
+                className="text-sm"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               ></input>
             </div>
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-              <DynamicTable data={props.users} columns={test} />
+              <Link href={route('user-management.create')}>Create</Link>
+              <DynamicTable
+                data={props.users}
+                columns={test}
+                sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
+              />
             </div>
           </div>
         </div>

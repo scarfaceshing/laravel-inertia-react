@@ -17,11 +17,11 @@
 }
 
 .table-1 > thead {
-    @apply text-base text-white uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400
+    @apply text-base text-white bg-gray-500 dark:bg-gray-700 dark:text-gray-400
 }
 
 .table-1 > thead th {
-    @apply py-3 lowercase text-center pl-3
+    @apply py-3 text-left pl-3
 }
 
 .table-1 > tbody tr {
