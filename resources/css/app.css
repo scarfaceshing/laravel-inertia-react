@@ -5,29 +5,29 @@
 /* global-style */
 
 .global_background {
-    @apply bg-gray-100
+  @apply bg-gray-100;
 }
 
 .sidebar {
-    @apply bg-gray-800 dark:bg-gray-200 text-white
+  @apply bg-gray-800 dark:bg-gray-200 text-white;
 }
 
 .table-1 {
-    @apply w-full text-sm text-left text-gray-500 dark:text-gray-400
+  @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
 }
 
 .table-1 > thead {
-    @apply text-base text-white bg-gray-500 dark:bg-gray-700 dark:text-gray-400
+  @apply text-base text-white bg-gray-500 dark:bg-gray-700 dark:text-gray-400;
 }
 
 .table-1 > thead th {
-    @apply py-3 text-left pl-3
+  @apply py-3 text-left pl-3;
 }
 
 .table-1 > tbody tr {
-    @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700
+  @apply bg-white border-b dark:bg-gray-800 dark:border-gray-700;
 }
 
 .table-1 > tbody td {
-    @apply py-3 text-base text-left pl-3
+  @apply py-3 text-base text-left pl-3;
 }

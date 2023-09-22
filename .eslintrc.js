@@ -31,7 +31,9 @@ module.exports = {
     'react/jsx-closing-bracket-location': [2, 'tag-aligned'],
     'prettier/prettier': [
       'error',
-      {},
+      {
+        printWidth: 120,
+      },
       {
         usePrettierrc: true,
       },

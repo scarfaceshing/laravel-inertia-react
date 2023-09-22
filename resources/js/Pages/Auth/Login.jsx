@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
 import Checkbox from '@/Components/Checkbox';
-import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 export default function Login({ status, canResetPassword }) {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -21,12 +21,7 @@ export default function Login({ status, canResetPassword }) {
   }, []);
 
   const handleOnChange = event => {
-    setData(
-      event.target.name,
-      event.target.type === 'checkbox'
-        ? event.target.checked
-        : event.target.value
-    );
+    setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
   };
 
   const submit = e => {
@@ -39,9 +34,7 @@ export default function Login({ status, canResetPassword }) {
     <GuestLayout>
       <Head title="Log in" />
 
-      {status && (
-        <div className="mb-4 font-medium text-sm text-green-600">{status}</div>
-      )}
+      {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
       <form onSubmit={submit}>
         <div>
@@ -79,11 +72,7 @@ export default function Login({ status, canResetPassword }) {
 
         <div className="block mt-4">
           <label className="flex items-center">
-            <Checkbox
-              name="remember"
-              value={data.remember}
-              onChange={handleOnChange}
-            />
+            <Checkbox name="remember" value={data.remember} onChange={handleOnChange} />
             <span className="ml-2 text-sm text-gray-600">Remember me</span>
           </label>
         </div>

@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 export default function ResetPassword({ token, email }) {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -69,10 +69,7 @@ export default function ResetPassword({ token, email }) {
         </div>
 
         <div className="mt-4">
-          <InputLabel
-            htmlFor="password_confirmation"
-            value="Confirm Password"
-          />
+          <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
 
           <TextInput
             type="password"

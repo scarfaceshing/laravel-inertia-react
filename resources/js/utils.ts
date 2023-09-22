@@ -1,3 +1,5 @@
-import * as dayjs from 'dayjs'
+import * as dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat);
 
-export const formatDate = (date) => dayjs(date).format('DD/MM/YYYY H:M:s')
+export const formatDate = date => dayjs(date).format('l LTS');

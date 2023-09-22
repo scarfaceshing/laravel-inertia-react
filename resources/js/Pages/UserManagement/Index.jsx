@@ -1,9 +1,8 @@
-import { formatDate } from '@/utils';
-import { Head, Link, router } from '@inertiajs/react';
-import { InertiaLink, usePage } from '@inertiajs/inertia-react';
-import { useEffect, useState } from 'react';
 import DynamicTable from '@/Components/DynamicTable';
 import MainLayout from '@/Layouts/MainLayout';
+import { formatDate } from '@/utils';
+import { Head, Link, router } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
 export default function Index(props) {
   const [search, setSearch] = useState('');
@@ -34,13 +33,10 @@ export default function Index(props) {
     );
   }
 
-  const test = [
+  const columns = [
     {
-      column: '',
+      column: '_index',
       name: '#',
-      mutate: (value, index) => {
-        return index + 1;
-      },
     },
     {
       column: 'username',
@@ -87,18 +83,13 @@ export default function Index(props) {
         <div>
           <div className="bg-white p-2 rounded-lg">
             <div className="pb-5">
-              <input
-                type="text"
-                className="text-sm"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              ></input>
+              <input type="text" className="text-sm" value={search} onChange={e => setSearch(e.target.value)}></input>
             </div>
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <Link href={route('user-management.create')}>Create</Link>
               <DynamicTable
                 data={props.users}
-                columns={test}
+                columns={columns}
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
               />
             </div>

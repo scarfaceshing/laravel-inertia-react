@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -21,12 +21,7 @@ export default function Register() {
   }, []);
 
   const handleOnChange = event => {
-    setData(
-      event.target.name,
-      event.target.type === 'checkbox'
-        ? event.target.checked
-        : event.target.value
-    );
+    setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
   };
 
   const submit = e => {
@@ -92,10 +87,7 @@ export default function Register() {
         </div>
 
         <div className="mt-4">
-          <InputLabel
-            htmlFor="password_confirmation"
-            value="Confirm Password"
-          />
+          <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
 
           <TextInput
             id="password_confirmation"

@@ -1,21 +1,20 @@
-import { useRef } from 'react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { useForm } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import { useForm } from '@inertiajs/react';
+import { useRef } from 'react';
 
 export default function UpdatePasswordForm({ className }) {
   const passwordInput = useRef();
   const currentPasswordInput = useRef();
 
-  const { data, setData, errors, put, reset, processing, recentlySuccessful } =
-    useForm({
-      current_password: '',
-      password: '',
-      password_confirmation: '',
-    });
+  const { data, setData, errors, put, reset, processing, recentlySuccessful } = useForm({
+    current_password: '',
+    password: '',
+    password_confirmation: '',
+  });
 
   const updatePassword = e => {
     e.preventDefault();
@@ -81,10 +80,7 @@ export default function UpdatePasswordForm({ className }) {
         </div>
 
         <div>
-          <InputLabel
-            htmlFor="password_confirmation"
-            value="Confirm Password"
-          />
+          <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
 
           <TextInput
             id="password_confirmation"
