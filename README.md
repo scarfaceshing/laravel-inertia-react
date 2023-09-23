@@ -13,7 +13,7 @@ npm run docker-up
 ### Enter workspace
 
 ```
-npm run exec
+npm run docker-exec
 ```
 
 ### Run project
