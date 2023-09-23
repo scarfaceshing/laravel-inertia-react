@@ -31,5 +31,5 @@ npm run pre-commit
 
 ### Documentations
 
-https://www.luckymedia.dev/blog/laravel-breeze-with-inertia-react-eslint-prettier-pint-and-husky
-https://laradock.io/
+<div>https://www.luckymedia.dev/blog/laravel-breeze-with-inertia-react-eslint-prettier-pint-and-husky</div>
+<div>https://laradock.io/</div>
