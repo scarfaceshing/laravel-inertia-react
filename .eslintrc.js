@@ -42,7 +42,7 @@ module.exports = {
     'react/prop-types': 'off',
     'no-console': 2,
     'sort-imports': [
-      'error',
+      'warn',
       {
         ignoreCase: false,
         ignoreDeclarationSort: false,

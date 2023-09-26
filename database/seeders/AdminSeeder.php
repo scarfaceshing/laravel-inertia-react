@@ -9,7 +9,6 @@ use App\Models\User;
 class AdminSeeder extends Seeder
 {
     private const ADMIN = [
-        'name' => "Admin",
         'username' => "admin",
         'email' => 'admin@system.com',
         'password' => '$2y$10$DrEJaCZm7GGWtyvARcVOqOvI7.AbjwB0OUzUX3a7xWGLHNOZFtCzO'

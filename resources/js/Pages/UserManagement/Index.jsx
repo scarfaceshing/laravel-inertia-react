@@ -1,31 +1,40 @@
+import { Close, Pen, Trash } from '@/icons';
+import { formatDate } from '@/utils';
+import { Head, router } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
+import BreadCrump from '@/Components/BreadCrump';
 import DynamicTable from '@/Components/DynamicTable';
 import MainLayout from '@/Layouts/MainLayout';
-import { formatDate } from '@/utils';
-import { Head, Link, router } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import Modal from '@/Components/Modal';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 
 export default function Index(props) {
   const [search, setSearch] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [userData, setUserData] = useState({});
+  const [limit, setLimit] = useState(10);
 
   useEffect(() => {
     router.get(
-      '/user-management',
+      route('user-management.index'),
       {
         search: search,
-        limit: 10,
+        limit: limit,
         sort: 'id',
         orderBy: 'ASC',
+        page: 1,
       },
-      { preserveState: true }
+      { preserveState: true, onSuccess: data => console.log(data) }
     );
-  }, [search]);
+  }, [search, limit]);
 
   function sortColumn(sortBy, orderBy) {
     router.get(
-      '/user-management',
+      route('user-management.index'),
       {
         search: search,
-        limit: 10,
+        limit: limit,
         sortBy: sortBy,
         orderBy: orderBy,
       },
@@ -37,25 +46,15 @@ export default function Index(props) {
     {
       column: '_index',
       name: '#',
+      sort: false,
     },
     {
       column: 'username',
       name: 'Username',
     },
     {
-      column: 'name',
-      name: 'Name',
-    },
-    {
       column: 'email',
       name: 'Email',
-    },
-    {
-      column: 'email_verified_at',
-      name: 'Verified at',
-      mutate: value => {
-        return formatDate(value);
-      },
     },
     {
       column: 'created_at',
@@ -67,18 +66,39 @@ export default function Index(props) {
     {
       column: 'id',
       name: 'Action',
-      mutate: id => {
-        return <Link href={route('user-management.edit', id)}>Edit {id}</Link>;
+      sort: false,
+      mutate: (value, data) => {
+        return (
+          <div className="flex gap-x-2">
+            <SecondaryButton onClick={() => router.get(route('user-management.edit', value))}>
+              <span className="text-blue-500">
+                <Pen />
+              </span>
+            </SecondaryButton>
+            <SecondaryButton onClick={() => onRemove(data)}>
+              <Trash />
+            </SecondaryButton>
+          </div>
+        );
       },
     },
   ];
+
+  function onRemove(data) {
+    setShowModal(true);
+    setUserData(user => data);
+  }
+
+  function remove(data) {
+    router.delete(route('user-management.destroy', data.id), { onSuccess: () => setShowModal(false) });
+  }
 
   return (
     <MainLayout auth={props.auth} errors={props.errors}>
       <Head title="User Management" />
       <div>
         <div className="pb-5">
-          <h1 className="text-3xl text-gray-900">User Management</h1>
+          <BreadCrump />
         </div>
         <div>
           <div className="bg-white p-2 rounded-lg">
@@ -86,16 +106,38 @@ export default function Index(props) {
               <input type="text" className="text-sm" value={search} onChange={e => setSearch(e.target.value)}></input>
             </div>
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-              <Link href={route('user-management.create')}>Create</Link>
+              <PrimaryButton onClick={() => router.get(route('user-management.create'))}>Create</PrimaryButton>
               <DynamicTable
-                data={props.users}
+                data={props.users.data}
                 columns={columns}
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
+                selectLimit={[10, 50, 100]}
+                onChangeLimit={value => setLimit(limit => value)}
               />
             </div>
           </div>
         </div>
       </div>
+      <Modal show={showModal}>
+        <div className="flex justify-end">
+          <div className="p-2" onClick={() => setShowModal(false)}>
+            <Close />
+          </div>
+        </div>
+        <div className="h-64 flex flex-col sm:justify-center items-center gap-2">
+          <h1>Are you sure to delete?</h1>
+          <div className="text-center mb-2">
+            <p>{userData.username}</p>
+            <p>{userData.email}</p>
+          </div>
+          <div className="flex gap-x-3">
+            <PrimaryButton className="px-7" onClick={() => remove(userData)}>
+              Yes
+            </PrimaryButton>
+            <SecondaryButton onClick={() => setShowModal(false)}>Cancel</SecondaryButton>
+          </div>
+        </div>
+      </Modal>
     </MainLayout>
   );
 }
