@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
-import SecondaryButton from './SecondaryButton';
+
+const ASCENDING = 'ASC';
+const DESCENDING = 'DESC';
 
 export default function DynamicTable({ className = '', ...props }) {
-  const [orderBy, setOrderBy] = useState('ASC');
+  const [orderBy, setOrderBy] = useState(ASCENDING);
   const caret = useRef([]);
 
   function orderColumn(column, indexRow, sort = true) {
@@ -12,10 +14,10 @@ export default function DynamicTable({ className = '', ...props }) {
       return false;
     }
 
-    if (orderBy === 'ASC') {
-      setOrderBy('DESC');
-    } else if (orderBy === 'DESC') {
-      setOrderBy('ASC');
+    if (orderBy === ASCENDING) {
+      setOrderBy(DESCENDING);
+    } else if (orderBy === DESCENDING) {
+      setOrderBy(ASCENDING);
     }
 
     props.sortColumn(column, orderBy);
@@ -23,12 +25,13 @@ export default function DynamicTable({ className = '', ...props }) {
 
   return (
     <div>
-      <SelectLimit selectLimit={props.selectLimit} onSelectLimit={value => props.onChangeLimit(value)} />
-      <table className="table-1">
-        <thead>
+      <TableHeader />
+      <SelectLimitComponent lengthMenu={props.lengthMenu} onSelectLimit={value => props.onChangeLimit(value)} />
+      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead className="text-base text-white bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             {props.columns.map(({ column, name, sort }, indexRow) => (
-              <th key={indexRow} onClick={() => orderColumn(column, indexRow, sort)}>
+              <th key={indexRow} onClick={() => orderColumn(column, indexRow, sort)} className="py-3 text-left pl-3">
                 <div className="flex space-x-1">
                   <span>{name}</span>
                   <div ref={el => (caret.current[indexRow] = el)} className="hidden">
@@ -41,33 +44,33 @@ export default function DynamicTable({ className = '', ...props }) {
         </thead>
         <tbody>
           {props.data.map((dataRow, indexRow) => (
-            <tr key={indexRow}>
+            <tr key={indexRow} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
               {props.columns.map(({ column, mutate }, columnIndex) => (
-                <td key={columnIndex}>
-                  <TableData mutate={mutate} dataColumn={column} dataRow={dataRow} indexRow={indexRow} />
+                <td key={columnIndex} className="py-3 text-base text-left pl-3">
+                  <TableDataComponent mutate={mutate} dataColumn={column} dataRow={dataRow} indexRow={indexRow} />
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="grid justify-end">
-        <div className="grid grid-cols-1 grid-rows-1">
-          <div>
-            <Pagenation />
-          </div>
-          <div className="text-right">
-            <span className="text-sm text-gray-700 dark:text-gray-400">
-              Showing <span className="font-semibold text-gray-900 dark:text-white">1</span> to{' '}
-              <span className="font-semibold text-gray-900 dark:text-white">10</span> of{' '}
-              <span className="font-semibold text-gray-900 dark:text-white">100</span> Entries
-            </span>
-          </div>
+      <div className="grid grid-cols-2 grid-rows-1">
+        <div>
+          <span className="text-sm text-gray-700 dark:text-gray-400">
+            Showing <span className="font-semibold text-gray-900 dark:text-white">1</span> to{' '}
+            <span className="font-semibold text-gray-900 dark:text-white">10</span> of{' '}
+            <span className="font-semibold text-gray-900 dark:text-white">100</span> Entries
+          </span>
+        </div>
+        <div className="flex justify-end">
+          <Pagination />
         </div>
       </div>
     </div>
   );
 }
+
+export const TableHeader = ({ children }) => <div>{children}</div>;
 
 // const toggleShow = (element, indexRow, lastIndex) => {
 //   if (indexRow === lastIndex) {
@@ -76,7 +79,7 @@ export default function DynamicTable({ className = '', ...props }) {
 //   }
 // };
 
-const TableData = ({ mutate, dataColumn, dataRow, indexRow }) => {
+const TableDataComponent = ({ mutate, dataColumn, dataRow, indexRow }) => {
   if (dataColumn === '_index') {
     return indexRow + 1;
   } else {
@@ -88,9 +91,9 @@ const TableData = ({ mutate, dataColumn, dataRow, indexRow }) => {
   }
 };
 
-const SelectLimit = ({ selectLimit, onSelectLimit }) => (
+const SelectLimitComponent = ({ lengthMenu, onSelectLimit }) => (
   <select onChange={e => onSelectLimit(e.target.value)}>
-    {selectLimit.map(limit => (
+    {lengthMenu.map(limit => (
       <option key={limit} value={limit}>
         {limit}
       </option>
@@ -98,7 +101,7 @@ const SelectLimit = ({ selectLimit, onSelectLimit }) => (
   </select>
 );
 
-const Pagenation = () => (
+const Pagination = () => (
   <div className="flex space-x-2">
     <nav aria-label="Page navigation example">
       <ul className="flex items-center -space-x-px h-8 text-sm">

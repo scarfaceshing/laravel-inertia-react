@@ -3,7 +3,7 @@ import { formatDate } from '@/utils';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import BreadCrump from '@/Components/BreadCrump';
-import DynamicTable from '@/Components/DynamicTable';
+import DynamicTable, { TableHeader } from '@/Components/DynamicTable';
 import MainLayout from '@/Layouts/MainLayout';
 import Modal from '@/Components/Modal';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -25,7 +25,7 @@ export default function Index(props) {
         orderBy: 'ASC',
         page: 1,
       },
-      { preserveState: true, onSuccess: data => console.log(data) }
+      { preserveState: true, onSuccess: data => data }
     );
   }, [search, limit]);
 
@@ -102,16 +102,23 @@ export default function Index(props) {
         </div>
         <div>
           <div className="bg-white p-2 rounded-lg">
-            <div className="pb-5">
-              <input type="text" className="text-sm" value={search} onChange={e => setSearch(e.target.value)}></input>
-            </div>
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-              <PrimaryButton onClick={() => router.get(route('user-management.create'))}>Create</PrimaryButton>
+              <TableHeader>
+                <div>
+                  <PrimaryButton onClick={() => router.get(route('user-management.create'))}>Create</PrimaryButton>
+                  <input
+                    type="text"
+                    className="text-sm"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                  ></input>
+                </div>
+              </TableHeader>
               <DynamicTable
                 data={props.users.data}
                 columns={columns}
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
-                selectLimit={[10, 50, 100]}
+                lengthMenu={[10, 50, 100]}
                 onChangeLimit={value => setLimit(limit => value)}
               />
             </div>

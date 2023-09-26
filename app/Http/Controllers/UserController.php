@@ -17,11 +17,12 @@ class UserController extends Controller
 
         $users = User
             ::where('username','LIKE',"%{$search}%")
+            ->orWhere('email', 'LIKE', "%{$search}%")
             ->when($sort_by, fn ($query) => $query->orderBy($sort_by, $order_by))
             ->paginate($limit);
 
         return Inertia::render('UserManagement/Index', [
-            'users' => $users,
+            'users' => $users
         ]);
     }
 
