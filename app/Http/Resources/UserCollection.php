@@ -15,7 +15,12 @@ class UserCollection extends ResourceCollection
     public function toArray($request)
     {
         return $this->collect->map->only(
-            'name', 'username', 'email', 'email_verified_at', 'created_at', 'updated_at'
+            'name',
+            'username',
+            'email',
+            'email_verified_at',
+            'created_at',
+            'updated_at'
         );
     }
 }

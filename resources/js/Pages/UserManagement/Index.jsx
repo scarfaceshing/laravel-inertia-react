@@ -120,6 +120,7 @@ export default function Index(props) {
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
                 lengthMenu={[10, 50, 100]}
                 onChangeLimit={value => setLimit(limit => value)}
+                pagination={props.users}
               />
             </div>
           </div>

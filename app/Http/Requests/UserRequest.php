@@ -16,8 +16,8 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => ['required','min:5','max:50', Rule::unique(User::class)->ignore($this->id)],
-            'email' => ['required', 'email:rfc,dns','min:5','max:50', Rule::unique(User::class)->ignore($this->id)],
+            'username' => ['required', 'min:5', 'max:50', Rule::unique(User::class)->ignore($this->id)],
+            'email' => ['required', 'email:rfc,dns', 'min:5', 'max:50', Rule::unique(User::class)->ignore($this->id)],
             'password' => [Rule::when(($this->password || $this->password_confirmation), fn () => ['required', 'confirmed', 'min:6', 'max:50'])],
         ];
     }

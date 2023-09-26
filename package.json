@@ -5,8 +5,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint --fix .",
-    "format": "prettier 'resources/{js,jsx}/**/*.{js,jsx}' --write",
-    "pre-commit": "npm run format && lint-staged && pretty-quick --staged",
+    "format": "prettier 'resources/{js,jsx}/**/*.{js,jsx}' --write && pint",
+    "pint": "pint --preset psr12",
+    "pre-commit": "npm run format && lint-staged && pretty-quick --staged && pint",
     "docker-up": "./laradock.sh up",
     "docker-exec": "./laradock.sh exec"
   },
