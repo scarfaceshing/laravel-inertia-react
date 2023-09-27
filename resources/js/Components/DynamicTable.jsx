@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import BasicButton from '@/Components/BasicButton';
+import { CaretLeft, CaretRight } from '@/icons';
 
 const ASCENDING = 'ASC';
 const DESCENDING = 'DESC';
@@ -26,7 +28,6 @@ export default function DynamicTable({ className = '', ...props }) {
   return (
     <div>
       <TableHeader />
-      <SelectLimitComponent lengthMenu={props.lengthMenu} onSelectLimit={value => props.onChangeLimit(value)} />
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-base text-white bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -57,13 +58,17 @@ export default function DynamicTable({ className = '', ...props }) {
       <div className="grid grid-cols-2 grid-rows-1">
         <div>
           <span className="text-sm text-gray-700 dark:text-gray-400">
-            Showing <span className="font-semibold text-gray-900 dark:text-white">1</span> to{' '}
-            <span className="font-semibold text-gray-900 dark:text-white">10</span> of{' '}
-            <span className="font-semibold text-gray-900 dark:text-white">100</span> Entries
+            Showing <span className="font-semibold text-gray-900 dark:text-white">{props.fromPage}</span> to{' '}
+            <span className="font-semibold text-gray-900 dark:text-white">{props.toPage}</span> of{' '}
+            <span className="font-semibold text-gray-900 dark:text-white">{props.totalPages}</span> Entries
           </span>
         </div>
         <div className="flex justify-end">
-          <Pagination />
+          <Pagination
+            currentPage={props.currentPage}
+            pageAction={value => props.pageAction(value)}
+            links={props.links}
+          />
         </div>
       </div>
     </div>
@@ -91,108 +96,39 @@ const TableDataComponent = ({ mutate, dataColumn, dataRow, indexRow }) => {
   }
 };
 
-const SelectLimitComponent = ({ lengthMenu, onSelectLimit }) => (
-  <select onChange={e => onSelectLimit(e.target.value)}>
-    {lengthMenu.map(limit => (
-      <option key={limit} value={limit}>
-        {limit}
-      </option>
-    ))}
-  </select>
-);
+const Pagination = ({ currentPage, pageAction, links = {} }) => {
+  function handleClick(item) {
+    pageAction(item);
+  }
 
-const Pagination = () => (
-  <div className="flex space-x-2">
-    <nav aria-label="Page navigation example">
-      <ul className="flex items-center -space-x-px h-8 text-sm">
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Previous</span>
-            <svg
-              className="w-2.5 h-2.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 1 1 5l4 4"
-              />
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            1
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            2
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            aria-current="page"
-            className="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-          >
-            3
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            4
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            5
-          </a>
-        </li>
-        <li>
-          <a
-            href="#"
-            className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <span className="sr-only">Next</span>
-            <svg
-              className="w-2.5 h-2.5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 6 10"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 9 4-4-4-4"
-              />
-            </svg>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-);
+  return (
+    <div className="flex space-x-2">
+      <nav aria-label="Page navigation example">
+        <ul className="flex items-center -space-x-px h-8 text-sm">
+          {links.map((item, index) => (
+            <li key={index}>
+              <BasicButton
+                onClick={() => handleClick(item)}
+                className={`${
+                  item.active ? 'text-blue-500 bg-blue-100' : 'text-gray-500'
+                } flex items-center justify-center px-3 h-8 leading-tight bg-white hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  border-gray-300 hover:bg-gray-100`}
+              >
+                <PaginateButton label={item.label} />
+              </BasicButton>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  );
+};
+
+const PaginateButton = ({ label }) => {
+  if (label === '&laquo; Previous') {
+    return <CaretLeft />;
+  } else if (label === 'Next &raquo;') {
+    return <CaretRight />;
+  } else {
+    return label;
+  }
+};

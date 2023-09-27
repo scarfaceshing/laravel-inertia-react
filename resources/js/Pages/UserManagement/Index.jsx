@@ -4,16 +4,25 @@ import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import BreadCrump from '@/Components/BreadCrump';
 import DynamicTable, { TableHeader } from '@/Components/DynamicTable';
+import InputLabel from '@/Components/InputLabel';
 import MainLayout from '@/Layouts/MainLayout';
 import Modal from '@/Components/Modal';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
+import TextInput from '@/Components/TextInput';
+import Select from '@/Components/Select';
 
 export default function Index(props) {
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState({});
   const [limit, setLimit] = useState(10);
+  const lengthMenu = [10, 50, 100];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(null);
+  const [fromPage, setFromPage] = useState(null);
+  const [toPage, setToPage] = useState(null);
+  const [links, setLinks] = useState([]);
 
   useEffect(() => {
     router.get(
@@ -23,11 +32,20 @@ export default function Index(props) {
         limit: limit,
         sort: 'id',
         orderBy: 'ASC',
-        page: 1,
+        page: currentPage,
       },
-      { preserveState: true, onSuccess: data => data }
+      {
+        preserveState: true,
+        onSuccess: ({ props }) => {
+          setTotalPages(props.users.total);
+          setFromPage(props.users.from);
+          setToPage(props.users.to);
+          setLinks(link => props.users.links);
+          console.log(links);
+        },
+      }
     );
-  }, [search, limit]);
+  }, [search, limit, currentPage]);
 
   function sortColumn(sortBy, orderBy) {
     router.get(
@@ -93,6 +111,17 @@ export default function Index(props) {
     router.delete(route('user-management.destroy', data.id), { onSuccess: () => setShowModal(false) });
   }
 
+  function pageAction({ label, url }) {
+    if (url === null || label === '...') return false;
+    if (['&laquo; Previous', 'Next &raquo;'].includes(label)) {
+      let page = url.split('=').splice('-1').toString();
+      console.log(page);
+      setCurrentPage(parseInt(page));
+    } else {
+      setCurrentPage(parseInt(label));
+    }
+  }
+
   return (
     <MainLayout auth={props.auth} errors={props.errors}>
       <Head title="User Management" />
@@ -104,23 +133,32 @@ export default function Index(props) {
           <div className="bg-white p-2 rounded-lg">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <TableHeader>
-                <div>
-                  <PrimaryButton onClick={() => router.get(route('user-management.create'))}>Create</PrimaryButton>
-                  <input
-                    type="text"
-                    className="text-sm"
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                  ></input>
+                <PrimaryButton onClick={() => router.get(route('user-management.create'))}>Create</PrimaryButton>
+                <div className="flex justify-between py-2">
+                  <div>
+                    <InputLabel htmlFor="search">Search</InputLabel>
+                    <TextInput
+                      id="search"
+                      className="text-sm"
+                      value={search}
+                      onChange={e => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="pt-5">
+                    <Select options={lengthMenu} handleChange={value => setLimit(value)} />
+                  </div>
                 </div>
               </TableHeader>
               <DynamicTable
                 data={props.users.data}
                 columns={columns}
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
-                lengthMenu={[10, 50, 100]}
-                onChangeLimit={value => setLimit(limit => value)}
                 pagination={props.users}
+                totalPages={totalPages}
+                fromPage={fromPage}
+                toPage={toPage}
+                links={links}
+                pageAction={value => pageAction(value)}
               />
             </div>
           </div>
