@@ -9,8 +9,8 @@ import MainLayout from '@/Layouts/MainLayout';
 import Modal from '@/Components/Modal';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import TextInput from '@/Components/TextInput';
 import Select from '@/Components/Select';
+import TextInput from '@/Components/TextInput';
 
 export default function Index(props) {
   const [search, setSearch] = useState('');
@@ -26,7 +26,7 @@ export default function Index(props) {
 
   useEffect(() => {
     router.get(
-      route('user-management.index'),
+      route('users.index'),
       {
         search: search,
         limit: limit,
@@ -40,8 +40,8 @@ export default function Index(props) {
           setTotalPages(props.users.total);
           setFromPage(props.users.from);
           setToPage(props.users.to);
-          setLinks(link => props.users.links);
-          console.log(links);
+          setLinks(() => props.users.links);
+          console.log(props);
         },
       }
     );
@@ -49,7 +49,7 @@ export default function Index(props) {
 
   function sortColumn(sortBy, orderBy) {
     router.get(
-      route('user-management.index'),
+      route('users.index'),
       {
         search: search,
         limit: limit,
@@ -88,7 +88,7 @@ export default function Index(props) {
       mutate: (value, data) => {
         return (
           <div className="flex gap-x-2">
-            <SecondaryButton onClick={() => router.get(route('user-management.edit', value))}>
+            <SecondaryButton onClick={() => router.get(route('users.edit', value))}>
               <span className="text-blue-500">
                 <Pen />
               </span>
@@ -104,18 +104,17 @@ export default function Index(props) {
 
   function onRemove(data) {
     setShowModal(true);
-    setUserData(user => data);
+    setUserData(() => data);
   }
 
   function remove(data) {
-    router.delete(route('user-management.destroy', data.id), { onSuccess: () => setShowModal(false) });
+    router.delete(route('users.destroy', data.id), { onSuccess: () => setShowModal(false) });
   }
 
   function pageAction({ label, url }) {
     if (url === null || label === '...') return false;
     if (['&laquo; Previous', 'Next &raquo;'].includes(label)) {
       let page = url.split('=').splice('-1').toString();
-      console.log(page);
       setCurrentPage(parseInt(page));
     } else {
       setCurrentPage(parseInt(label));
@@ -133,7 +132,7 @@ export default function Index(props) {
           <div className="bg-white p-2 rounded-lg">
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <TableHeader>
-                <PrimaryButton onClick={() => router.get(route('user-management.create'))}>Create</PrimaryButton>
+                <PrimaryButton onClick={() => router.get(route('users.create'))}>Create</PrimaryButton>
                 <div className="flex justify-between py-2">
                   <div>
                     <InputLabel htmlFor="search">Search</InputLabel>

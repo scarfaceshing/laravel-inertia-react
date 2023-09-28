@@ -44,4 +44,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // TODO: add relationship for roles and permission and also add traits to easy add permission or role
 }

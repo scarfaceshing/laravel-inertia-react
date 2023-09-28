@@ -108,10 +108,11 @@ const Pagination = ({ currentPage, pageAction, links = {} }) => {
           {links.map((item, index) => (
             <li key={index}>
               <BasicButton
+                disabled={item.label === '...' ? true : false}
                 onClick={() => handleClick(item)}
                 className={`${
                   item.active ? 'text-blue-500 bg-blue-100' : 'text-gray-500'
-                } flex items-center justify-center px-3 h-8 leading-tight bg-white hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  border-gray-300 hover:bg-gray-100`}
+                } flex items-center justify-center px-3 h-8 leading-tight bg-white hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  border-gray-300 hover:bg-gray-100`}
               >
                 <PaginateButton label={item.label} />
               </BasicButton>

@@ -65,5 +65,10 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        'permission' => \App\Http\Middleware\Permission::class
+        // 'inertia' => \App\Http\Middleware\HandleInertiaRequests::class,
+        // 'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+        // 'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
     ];
 }

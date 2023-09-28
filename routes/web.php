@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,15 +28,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/user-management', [UserController::class, 'index'])->name('user-management.index');
-    Route::get('/user-management/create', [UserController::class, 'create'])->name('user-management.create');
-    Route::post('/user-management/store', [UserController::class, 'store'])->name('user-management.store');
-    Route::get('/user-management/{user}/edit', [UserController::class, 'edit'])->name('user-management.edit');
-    Route::put('/user-management/{user}', [UserController::class, 'update'])->name('user-management.update');
-    Route::delete('/user-management/{user}/destroy', [UserController::class, 'destroy'])->name('user-management.destroy');
+    Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+    Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UsersController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}/destroy', [UsersController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';

@@ -17,9 +17,9 @@ const Form = props => {
     event.preventDefault();
 
     if (props.data.isEdit === true) {
-      put(route('user-management.update', props.data.id));
+      put(route('users.update', props.data.id));
     } else {
-      post(route('user-management.store'));
+      post(route('users.store'));
     }
   }
 

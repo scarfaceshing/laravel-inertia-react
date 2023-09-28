@@ -7,8 +7,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class UserController extends Controller
+class UsersController extends Controller
 {
+    public function __construct()
+    {   
+        // $this->middleware('permission:can_view_user|can_add_user');
+    }
+
     public function index(Request $request)
     {
         $limit = $request->query('limit');
@@ -21,26 +26,26 @@ class UserController extends Controller
             ->when($sort_by, fn ($query) => $query->orderBy($sort_by, $order_by))
             ->paginate($limit);
 
-        return Inertia::render('UserManagement/Index', [
-            'users' => $users,
+        return Inertia::render('Users/Index', [
+            'users' => $users
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('UserManagement/Create');
+        return Inertia::render('Users/Create');
     }
 
     public function store(UserRequest $request)
     {
         User::create($request->all());
 
-        return to_route('user-management.index');
+        return to_route('users.index');
     }
 
     public function edit(User $user)
     {
-        return Inertia::render('UserManagement/Edit', [
+        return Inertia::render('Users/Edit', [
             'users' => $user->only('id', 'username', 'email'),
         ]);
     }
@@ -53,7 +58,7 @@ class UserController extends Controller
             $user->update($request->only('username', 'email'));
         }
 
-        return to_route('user-management.index');
+        return to_route('users.index');
     }
 
     public function destroy(User $user)
