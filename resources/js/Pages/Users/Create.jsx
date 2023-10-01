@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import BreadCrump from '@/Components/BreadCrump';
-import Form from '@/Pages/UserManagement/Form';
+import Form from '@/Pages/Users/Form';
 import MainLayout from '@/Layouts/MainLayout';
 
 export default function Create(props) {

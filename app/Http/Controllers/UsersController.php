@@ -6,16 +6,19 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Utilities\Middleware;
 
 class UsersController extends Controller
 {
     public function __construct()
-    {   
-        // $this->middleware('permission:can_view_user|can_add_user');
+    {
+        $permissions = ['can_add_users', 'can_view_users'];
+        $permissions = Middleware::extractPermissions('ability', $permissions);
+        $this->middleware($permissions);
     }
 
     public function index(Request $request)
-    {
+    {   
         $limit = $request->query('limit');
         $search = $request->query('search');
         $sort_by = $request->query('sortBy');
@@ -27,7 +30,7 @@ class UsersController extends Controller
             ->paginate($limit);
 
         return Inertia::render('Users/Index', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 

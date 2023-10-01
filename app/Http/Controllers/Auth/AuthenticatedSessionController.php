@@ -31,7 +31,8 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
+        $request->user()->createToken('ADMIN', ['can_view_users', 'can_add_users'])->plainTextToken;
+        
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);
@@ -43,6 +44,7 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
+        $request->user()->tokens()->delete();
 
         $request->session()->invalidate();
 

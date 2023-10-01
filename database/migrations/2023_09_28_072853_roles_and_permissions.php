@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('description');
             $table->timestamps();
         });
-        
+
         Schema::create('roles_has_permissions', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('role_id');
