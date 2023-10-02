@@ -8,7 +8,8 @@ class Middleware
 {
     public static function extractPermissions(string $type, array $permissions = []): string
     {
-        $permissions = implode(',',  $permissions);
-        return $type . ':' . $permissions;
+        $permissions = implode(',', $permissions);
+
+        return $type.':'.$permissions;
     }
 }

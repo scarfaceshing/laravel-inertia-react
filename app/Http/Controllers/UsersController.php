@@ -4,21 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use App\Utilities\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Utilities\Middleware;
 
 class UsersController extends Controller
 {
+    public const USERS_API_URL = '/users';
+    
     public function __construct()
     {
-        $permissions = ['can_add_users', 'can_view_users'];
-        $permissions = Middleware::extractPermissions('ability', $permissions);
+        $permissions = ['can_view_users', 'can_add_users', 'can_edit_users', 'can_delete_users'];
+        $permissions = Middleware::extractPermissions('allowOnly', $permissions);
         $this->middleware($permissions);
     }
 
     public function index(Request $request)
-    {   
+    {
         $limit = $request->query('limit');
         $search = $request->query('search');
         $sort_by = $request->query('sortBy');
