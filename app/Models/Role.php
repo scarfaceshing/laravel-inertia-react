@@ -6,5 +6,5 @@ use Spatie\Permission\Models\Role as SpatieRole;
 
 class Role extends SpatieRole
 {
-    public const ADMINISTRATOR = 'administrator';
+ public const ADMINISTRATOR = 'administrator';
 }

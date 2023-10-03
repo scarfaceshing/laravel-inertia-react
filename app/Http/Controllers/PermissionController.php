@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use App\Models\Permission;
 use App\Utilities\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class RolesController extends Controller
+class PermissionController extends Controller
 {
  public const ROLES_API_URL = '/roles';
 
  public function __construct()
  {
-  $permissions = ['can_view_roles'];
+  $permissions = ['can_view_permissions'];
   $permissions = Middleware::extractPermissions('allowOnly', $permissions);
   $this->middleware($permissions);
  }
@@ -32,15 +32,12 @@ class RolesController extends Controller
   $sort_by = $request->query('sortBy');
   $order_by = $request->query('orderBy');
 
-  $roles = Role::select('*')
-   ->with('permissions')
-   ->where('name', 'LIKE', "%{$search}%")
+  $permissions = Permission::where('name', 'LIKE', "%{$search}%")
    ->when($sort_by, fn ($query) => $query->orderBy($sort_by, $order_by))
-   ->with('permissions')
    ->paginate($limit);
 
-  return Inertia::render('Roles/Index', [
-      'roles' => $roles,
+  return Inertia::render('Permissions/Index', [
+      'permissions' => $permissions,
   ]);
  }
 

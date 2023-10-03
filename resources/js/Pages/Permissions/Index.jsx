@@ -19,7 +19,7 @@ export default function Index(props) {
 
   useEffect(() => {
     router.get(
-      route('roles.index'),
+      route('permissions.index'),
       {
         search: search,
         limit: limit,
@@ -30,10 +30,10 @@ export default function Index(props) {
       {
         preserveState: true,
         onSuccess: ({ props }) => {
-          setTotalPages(props.roles.total);
-          setFromPage(props.roles.from);
-          setToPage(props.roles.to);
-          setLinks(() => props.roles.links);
+          setTotalPages(props.permissions.total);
+          setFromPage(props.permissions.from);
+          setToPage(props.permissions.to);
+          setLinks(() => props.permissions.links);
         },
       }
     );
@@ -41,7 +41,7 @@ export default function Index(props) {
 
   function sortColumn(sortBy, orderBy) {
     router.get(
-      route('roles.index'),
+      route('permissions.index'),
       {
         search: search,
         limit: limit,
@@ -65,13 +65,6 @@ export default function Index(props) {
     {
       column: 'description',
       name: 'Description',
-    },
-    {
-      column: 'permissions',
-      name: 'Permissions',
-      mutate: permissions => {
-        return permissions.map((item, key) => <div key={key}>{item.name}</div>);
-      },
     },
   ];
 
@@ -119,7 +112,7 @@ export default function Index(props) {
                 </div>
               </TableHeader>
               <DynamicTable
-                data={props.roles.data}
+                data={props.permissions.data}
                 columns={columns}
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
                 totalPages={totalPages}

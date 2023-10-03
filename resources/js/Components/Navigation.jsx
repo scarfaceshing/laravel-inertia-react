@@ -86,7 +86,7 @@ export default function Navigation(props) {
           </div>
 
           <div className="mt-3 space-y-1">
-            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+            <ResponsiveNavLink href="#">Profile</ResponsiveNavLink>
             <ResponsiveNavLink method="post" href={route('logout')} as="button">
               Log Out
             </ResponsiveNavLink>

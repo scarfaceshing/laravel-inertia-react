@@ -1,3 +1,9 @@
+/**
+ *
+ * Redundancy code in DynamicTable
+ *
+ */
+
 import { Close, Pen, Trash } from '@/icons';
 import { formatDate } from '@/utils';
 import { Head, router } from '@inertiajs/react';
@@ -41,7 +47,6 @@ export default function Index(props) {
           setFromPage(props.users.from);
           setToPage(props.users.to);
           setLinks(() => props.users.links);
-          console.log(props);
         },
       }
     );
@@ -126,7 +131,14 @@ export default function Index(props) {
       <Head title="User Management" />
       <div>
         <div className="pb-5">
-          <BreadCrump />
+          <BreadCrump
+            path={[
+              {
+                name: 'test',
+                icon: 'test',
+              },
+            ]}
+          />
         </div>
         <div>
           <div className="bg-white p-2 rounded-lg">
@@ -152,7 +164,6 @@ export default function Index(props) {
                 data={props.users.data}
                 columns={columns}
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
-                pagination={props.users}
                 totalPages={totalPages}
                 fromPage={fromPage}
                 toPage={toPage}

@@ -68,12 +68,12 @@ export default function Sidebar() {
                 </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  href={route('permissions.index')}
                   className="flex items-center w-full p-2 text-gray-100 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >
                   Permissions
-                </a>
+                </Link>
               </li>
             </ul>
           </li>

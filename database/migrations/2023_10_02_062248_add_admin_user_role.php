@@ -1,58 +1,52 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Permission;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
-    private const USER_PERMISSIONS = [
-        'can_view_users',
-        'can_add_users',
-        'can_edit_users',
-        'can_delete_users'
-    ];
+ private const ALL_PERMISSIONS = [
+     ...Permission::USER_PERMISSIONS,
+     Permission::CAN_VIEW_ROLES,
+     Permission::CAN_VIEW_PERMISSIONS,
+     Permission::CAN_VIEW_DASHBOARD,
+ ];
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up(): void
-    {
-        $role = Role::create(['name' => Role::ADMINISTRATOR]);
+ /**
+  * Run the migrations.
+  */
+ public function up(): void
+ {
+  $role = Role::create(['name' => Role::ADMINISTRATOR]);
 
-        collect(self::USER_PERMISSIONS)->each( function (string $permission = '') use ($role) { 
-            Permission::create(['name' => $permission]); 
-        });
+  collect(self::ALL_PERMISSIONS)->each(function (string $permission = '') {
+   Permission::create(['name' => $permission]);
+  });
 
-        $role->givePermissionTo(self::USER_PERMISSIONS);
-        $user = User::findOrFail(User::ADMINISTRATOR_ID);
+  $role->givePermissionTo(self::ALL_PERMISSIONS);
+  $user = User::findOrFail(User::ADMINISTRATOR_ID);
 
-        $user->assignRole(Role::ADMINISTRATOR);
-        $user->givePermissionTo(self::USER_PERMISSIONS);
-    }
+  $user->assignRole(Role::ADMINISTRATOR);
+  $user->givePermissionTo(self::ALL_PERMISSIONS);
+ }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down(): void
-    {
-        $user = User::findOrFail(User::ADMINISTRATOR_ID);
-        $role = Role::findByName(Role::ADMINISTRATOR);
+ /**
+  * Reverse the migrations.
+  */
+ public function down(): void
+ {
+  $user = User::findOrFail(User::ADMINISTRATOR_ID);
+  $role = Role::findByName(Role::ADMINISTRATOR);
 
-        $user->revokePermissionTo(self::USER_PERMISSIONS);
-        $user->removeRole(Role::ADMINISTRATOR);
-        $role->revokePermissionTo(self::USER_PERMISSIONS);
-       
-        $role->whereIn('name', self::USER_PERMISSIONS)->delete();
-        Permission::whereIn('name', self::USER_PERMISSIONS)->delete();
+  $user->revokePermissionTo(self::ALL_PERMISSIONS);
+  $user->removeRole(Role::ADMINISTRATOR);
+  $role->revokePermissionTo(self::ALL_PERMISSIONS);
 
-        $role->delete();
-    }
+  $role->whereIn('name', self::ALL_PERMISSIONS)->delete();
+  Permission::whereIn('name', self::ALL_PERMISSIONS)->delete();
+
+  $role->delete();
+ }
 };

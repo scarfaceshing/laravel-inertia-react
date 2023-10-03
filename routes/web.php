@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Foundation\Application;
@@ -20,26 +20,18 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Auth/Login');
+ return Inertia::render('Auth/Login');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+ Route::get('/dashboard', [DashboardController::class, 'index']);
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/users', [UsersController::class, 'index'])->name('users.index');
-    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
-    Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
-    Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
-    Route::put('/users/{user}', [UsersController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}/destroy', [UsersController::class, 'destroy'])->name('users.destroy');
+ Route::resource('/users', UsersController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
-    Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+ Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
+ Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
 });
 
 require __DIR__.'/auth.php';

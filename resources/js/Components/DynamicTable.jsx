@@ -2,6 +2,23 @@ import { useRef, useState } from 'react';
 import BasicButton from '@/Components/BasicButton';
 import { CaretLeft, CaretRight } from '@/icons';
 
+/**
+ * TODO: remove emit method and change to event listener and http request data should inside the component
+ */
+
+/**
+ * @param data object // response backend data.
+ * @param column array // table column.
+ * @param sortColumn function(sortBy, orderBy) // call back function to sort columns.
+ * @param totalPages integer // for displaying total pages.
+ * @param fromPage integer // for displaying from page.
+ * @param toPage integer // for displaying to page.
+ * @param links string // for displaying http link every click pages.
+ * @param pageAction function // callback function for previous and next.
+ *
+ * @return JSX.element // <DynamicTable />
+ */
+
 const ASCENDING = 'ASC';
 const DESCENDING = 'DESC';
 
