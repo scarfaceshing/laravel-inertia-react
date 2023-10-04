@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,7 @@ Route::middleware('auth')->group(function () {
  Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
  Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
 });
+
+Route::get('/test', [TestController::class, 'index'])->name('test.index');
 
 require __DIR__.'/auth.php';

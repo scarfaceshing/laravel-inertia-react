@@ -32,8 +32,8 @@ class UserTest extends TestCase
 
   $this->invalid_request_user = User::factory()->create();
   $this->invalid_request_user->givePermissionTo([
-   Permission::CAN_VIEW_USERS,
-   Permission::CAN_ADD_USERS,
+      Permission::CAN_VIEW_USERS,
+      Permission::CAN_ADD_USERS,
   ]);
  }
 
