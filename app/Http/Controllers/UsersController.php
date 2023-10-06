@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Utilities\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -16,7 +18,7 @@ class UsersController extends Controller
 
  public function __construct()
  {
-  $permissions = ['can_view_users', 'can_add_users', 'can_edit_users', 'can_delete_users'];
+  $permissions = ['can_view_users', 'can_add_users', 'can_edit_users', 'can_delete_users', 'can_change_role'];
   $permissions = Middleware::extractPermissions('allowOnly', $permissions);
   $this->middleware($permissions);
  }
@@ -28,13 +30,14 @@ class UsersController extends Controller
   $sort_by = $request->query('sortBy');
   $order_by = $request->query('orderBy');
 
-  $users = User::where('username', 'LIKE', "%{$search}%")
-   ->orWhere('email', 'LIKE', "%{$search}%")
+  $users = User::with(['permissions:id,name', 'roles:id,name'])
+   ->where('users.username', 'LIKE', "%{$search}%")
+   ->orWhere('users.email', 'LIKE', "%{$search}%")
    ->when($sort_by, fn ($query) => $query->orderBy($sort_by, $order_by))
    ->paginate($limit);
 
   return Inertia::render('Users/Index', [
-      'users' => $users,
+   'users' => $users,
   ]);
  }
 
@@ -45,7 +48,10 @@ class UsersController extends Controller
 
  public function store(UserRequest $request)
  {
-  User::create($request->all());
+  $data = $request->only('username', 'email', 'password', 'role');
+  $data['password'] = Hash::make($data['password']);
+  $user = User::create($data);
+  $user->assignRole($data['role']);
 
   return to_route('users.index');
  }
@@ -53,7 +59,7 @@ class UsersController extends Controller
  public function edit(User $user)
  {
   return Inertia::render('Users/Edit', [
-      'users' => $user->only('id', 'username', 'email'),
+   'users' => $user->only('id', 'username', 'email'),
   ]);
  }
 
@@ -64,6 +70,8 @@ class UsersController extends Controller
   } else {
    $user->update($request->only('username', 'email'));
   }
+
+  $user->assignRole($request->role);
 
   return to_route('users.index');
  }

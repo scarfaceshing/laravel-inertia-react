@@ -3,6 +3,9 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import Select from '@/Components/Select';
+import { ALL_ROLES, ADMINISTRATOR } from '@/constants';
+import { useEffect } from 'react';
 
 const Form = props => {
   const { data, setData, post, put, processing, errors } = useForm({
@@ -11,7 +14,14 @@ const Form = props => {
     email: props.data.email,
     password: props.data.password,
     password_confirmation: props.data.password_confirmation,
+    role: props.data.role,
   });
+
+  useEffect(() => {
+    if (!data.role) {
+      setData('role', ADMINISTRATOR);
+    }
+  }, [data.role]);
 
   function submit(event) {
     event.preventDefault();
@@ -75,6 +85,9 @@ const Form = props => {
             onChange={e => setData('password_confirmation', e.target.value)}
           />
           <InputError message={errors.password} />
+        </div>
+        <div>
+          <Select options={ALL_ROLES} handleChange={value => setData('role', value)} />
         </div>
         <div>
           <PrimaryButton type="submit">Submit</PrimaryButton>

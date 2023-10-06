@@ -4,7 +4,7 @@
  *
  */
 
-import { Close, Pen, Trash } from '@/icons';
+import { Close, Pen, Trash, Key } from '@/icons';
 import { formatDate } from '@/utils';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
@@ -79,6 +79,39 @@ export default function Index(props) {
       column: 'email',
       name: 'Email',
     },
+    {
+      column: '',
+      name: 'Role',
+      mutate: () => {
+        return (
+          <PrimaryButton className="text-white">
+            <Key />
+          </PrimaryButton>
+        );
+      },
+    },
+    /**
+     * Temporary comment
+   {
+      column: 'roles',
+      name: ' Role',
+      mutate: value => {
+        return (
+          <div className="flex gap-2">
+            {value.length > 0 ? (
+              value.map((role, index) => (
+                <span className="bossrder bg-gray-900 text-white p-2 rounded-lg" key={index}>
+                  {role.name}
+                </span>
+              ))
+            ) : (
+              <span>None</span>
+            )}
+          </div>
+        );
+      },
+    },
+     */
     {
       column: 'created_at',
       name: 'Created at',
