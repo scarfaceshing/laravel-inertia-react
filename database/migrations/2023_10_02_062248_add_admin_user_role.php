@@ -8,10 +8,10 @@ use Illuminate\Database\Migrations\Migration;
 return new class extends Migration
 {
  private const ALL_PERMISSIONS = [
-  ...Permission::USER_PERMISSIONS,
-  Permission::CAN_VIEW_ROLES,
-  Permission::CAN_VIEW_PERMISSIONS,
-  Permission::CAN_VIEW_DASHBOARD,
+     ...Permission::USER_PERMISSIONS,
+     Permission::CAN_VIEW_ROLES,
+     Permission::CAN_VIEW_PERMISSIONS,
+     Permission::CAN_VIEW_DASHBOARD,
  ];
 
  /**

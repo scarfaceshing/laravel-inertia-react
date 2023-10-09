@@ -8,10 +8,10 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
-use Illuminate\Support\Str;
 
 class UserTest extends TestCase
 {
@@ -65,7 +65,7 @@ class UserTest extends TestCase
             'email' => $this->faker()->email,
             'password' => $password,
             'password_confirmation' => $password,
-            'role' => Role::ADMINISTRATOR
+            'role' => Role::ADMINISTRATOR,
         ];
 
         $response = $this->actingAs($this->allowed_request_user)
@@ -83,17 +83,17 @@ class UserTest extends TestCase
             'email' => $this->faker()->email,
             'password' => $password,
             'password_confirmation' => $password,
-            'role' => Role::ADMINISTRATOR
+            'role' => Role::ADMINISTRATOR,
         ];
 
         $human_resource_role = [
             'name' => 'human_resource',
-            'description' => 'Human Resource'
+            'description' => 'Human Resource',
         ];
 
         $information_technology_role = [
             'name' => 'information_technology',
-            'description' => 'Information Technology'
+            'description' => 'Information Technology',
         ];
 
         Role::create($human_resource_role);
@@ -104,10 +104,10 @@ class UserTest extends TestCase
         $update_param = [
             'username' => $user->username,
             'email' => $user->email,
-            'role' => $human_resource_role
+            'role' => $human_resource_role,
         ];
 
-        $url = UsersController::USERS_API_URL . '/' . $user->id;
+        $url = UsersController::USERS_API_URL.'/'.$user->id;
 
         $response = $this->actingAs($this->allowed_request_user)
             ->json(Request::METHOD_PUT, $url, $update_param);

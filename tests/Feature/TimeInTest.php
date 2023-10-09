@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\UsersController;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,6 @@ class TimeInTest extends TestCase
      * @return void
      */
     private $auth_user;
-
 
     public function setUp(): void
     {

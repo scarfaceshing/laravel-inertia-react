@@ -8,9 +8,8 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Utilities\Middleware;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class UsersController extends Controller
 {
@@ -37,7 +36,7 @@ class UsersController extends Controller
    ->paginate($limit);
 
   return Inertia::render('Users/Index', [
-   'users' => $users,
+      'users' => $users,
   ]);
  }
 
@@ -59,7 +58,7 @@ class UsersController extends Controller
  public function edit(User $user)
  {
   return Inertia::render('Users/Edit', [
-   'users' => $user->only('id', 'username', 'email'),
+      'users' => $user->only('id', 'username', 'email'),
   ]);
  }
 

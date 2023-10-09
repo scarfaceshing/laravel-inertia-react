@@ -5,11 +5,11 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UsersController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use App\Jobs\TimeInJob;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +44,4 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/test', [TestController::class, 'index'])->name('test.index');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
