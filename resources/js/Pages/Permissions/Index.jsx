@@ -93,8 +93,8 @@ export default function Index(props) {
           />
         </div>
         <div>
-          <div className="bg-white p-2 rounded-lg">
-            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+          <div className="bg-white p-2">
+            <div className="overflow-hidden">
               <TableHeader>
                 <div className="flex justify-between py-2">
                   <div>

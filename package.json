@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@inertiajs/inertia-react": "^0.8.1",
-    "dayjs": "^1.11.10"
+    "dayjs": "^1.11.10",
+    "nprogress": "^0.2.0"
   }
 }

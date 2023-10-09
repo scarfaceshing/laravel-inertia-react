@@ -7,10 +7,10 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
- use CreatesApplication;
+    use CreatesApplication;
 
- public function createUser()
- {
-  $user = User::factory()->create();
- }
+    public function createUser()
+    {
+        return User::factory()->create();
+    }
 }

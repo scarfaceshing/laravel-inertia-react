@@ -4,7 +4,7 @@
  *
  */
 
-import { Close, Pen, Trash, Key } from '@/icons';
+import { Close, Key, Pen, Trash } from '@/icons';
 import { formatDate } from '@/utils';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
@@ -81,7 +81,7 @@ export default function Index(props) {
     },
     {
       column: '',
-      name: 'Role',
+      name: 'Permissions',
       mutate: () => {
         return (
           <PrimaryButton className="text-white">
@@ -174,8 +174,8 @@ export default function Index(props) {
           />
         </div>
         <div>
-          <div className="bg-white p-2 rounded-lg">
-            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+          <div className="bg-white p-2">
+            <div className="overflow-hidden">
               <TableHeader>
                 <PrimaryButton onClick={() => router.get(route('users.create'))}>Create</PrimaryButton>
                 <div className="flex justify-between py-2">

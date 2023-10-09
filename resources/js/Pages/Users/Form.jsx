@@ -1,11 +1,11 @@
+import { ADMINISTRATOR, ALL_ROLES } from '@/constants';
+import { useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
+import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import Select from '@/Components/Select';
-import { ALL_ROLES, ADMINISTRATOR } from '@/constants';
-import { useEffect } from 'react';
 
 const Form = props => {
   const { data, setData, post, put, processing, errors } = useForm({
@@ -87,7 +87,7 @@ const Form = props => {
           <InputError message={errors.password} />
         </div>
         <div>
-          <Select options={ALL_ROLES} handleChange={value => setData('role', value)} />
+          <PermissionSelection />
         </div>
         <div>
           <PrimaryButton type="submit">Submit</PrimaryButton>
@@ -96,5 +96,13 @@ const Form = props => {
     </form>
   );
 };
+
+export const PermissionSelection = () => (
+  <>
+    <h1>Permission</h1>
+    <InputLabel htmlFor="checkbox">test</InputLabel>
+    <Checkbox id="checkbox" />
+  </>
+);
 
 export default Form;
