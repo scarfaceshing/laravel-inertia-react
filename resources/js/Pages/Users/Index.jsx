@@ -43,10 +43,10 @@ export default function Index(props) {
       {
         preserveState: true,
         onSuccess: ({ props }) => {
-          setTotalPages(props.users.total);
-          setFromPage(props.users.from);
-          setToPage(props.users.to);
-          setLinks(() => props.users.links);
+          setTotalPages(props.data.total);
+          setFromPage(props.data.from);
+          setToPage(props.data.to);
+          setLinks(() => props.data.links);
         },
       }
     );
@@ -78,17 +78,6 @@ export default function Index(props) {
     {
       column: 'email',
       name: 'Email',
-    },
-    {
-      column: '',
-      name: 'Permissions',
-      mutate: () => {
-        return (
-          <PrimaryButton className="text-white">
-            <Key />
-          </PrimaryButton>
-        );
-      },
     },
     /**
      * Temporary comment
@@ -194,7 +183,7 @@ export default function Index(props) {
                 </div>
               </TableHeader>
               <DynamicTable
-                data={props.users.data}
+                data={props.data.data}
                 columns={columns}
                 sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
                 totalPages={totalPages}

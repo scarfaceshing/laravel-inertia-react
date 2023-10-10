@@ -37,11 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
 
     Route::post('/time-in', function (Request $request) {
-        dispatch(new TimeInJob($request));
-        // TimeInJob::dispatch($request)->delay(3);
+        TimeInJob::dispatch($request)->delay(3);
     })->name('timein');
 });
 
 Route::get('/test', [TestController::class, 'index'])->name('test.index');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -34,10 +34,6 @@ class UserTest extends TestCase
         $this->allowed_request_user->givePermissionTo(Permission::USER_PERMISSIONS);
 
         $this->invalid_request_user = $this->createUser();
-        $this->invalid_request_user->givePermissionTo([
-            Permission::CAN_VIEW_USERS,
-            Permission::CAN_ADD_USERS,
-        ]);
     }
 
     public function test_users_permission_ok()
@@ -72,48 +68,5 @@ class UserTest extends TestCase
             ->json(Request::METHOD_POST, UsersController::USERS_API_URL, $param);
 
         $response->assertStatus(Response::HTTP_FOUND);
-    }
-
-    public function test_users_change_role()
-    {
-        $password = Str::random(6);
-
-        $created_param = [
-            'username' => $this->faker()->userName,
-            'email' => $this->faker()->email,
-            'password' => $password,
-            'password_confirmation' => $password,
-            'role' => Role::ADMINISTRATOR,
-        ];
-
-        $human_resource_role = [
-            'name' => 'human_resource',
-            'description' => 'Human Resource',
-        ];
-
-        $information_technology_role = [
-            'name' => 'information_technology',
-            'description' => 'Information Technology',
-        ];
-
-        Role::create($human_resource_role);
-        Role::create($information_technology_role);
-
-        $user = User::create($created_param);
-
-        $update_param = [
-            'username' => $user->username,
-            'email' => $user->email,
-            'role' => $human_resource_role,
-        ];
-
-        $url = UsersController::USERS_API_URL.'/'.$user->id;
-
-        $response = $this->actingAs($this->allowed_request_user)
-            ->json(Request::METHOD_PUT, $url, $update_param);
-
-        dd($response->json(), $update_param, $user);
-
-        // $response->assertStatus(Response::HTTP_FOUND);
     }
 }

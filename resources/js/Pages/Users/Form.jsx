@@ -1,4 +1,4 @@
-import { ADMINISTRATOR, ALL_ROLES } from '@/constants';
+import { ADMINISTRATOR, ALL_PERMISSIONS } from '@/constants';
 import { useEffect } from 'react';
 import { useForm } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
@@ -14,7 +14,7 @@ const Form = props => {
     email: props.data.email,
     password: props.data.password,
     password_confirmation: props.data.password_confirmation,
-    role: props.data.role,
+    permission: props.data.permission,
   });
 
   useEffect(() => {
@@ -33,9 +33,20 @@ const Form = props => {
     }
   }
 
+  function handleCheck(value, permission) {
+    if (value === true) {
+      setData('permission', [...data.permission, permission]);
+    } else if (value === false) {
+      setData('permission');
+    }
+
+    console.log(data.permission);
+  }
+
   return (
     <form onSubmit={submit} className="grid grid-cols-1 justify-items-center items-center">
       <div className="space-y-5 w-1/2">
+        <h1>Users details</h1>
         <div>
           <InputLabel htmlFor="email">
             Email<span className="text-red-500 ml-1">&#42;</span>
@@ -86,8 +97,14 @@ const Form = props => {
           />
           <InputError message={errors.password} />
         </div>
-        <div>
-          <PermissionSelection />
+        <h1>Permissions</h1>
+        <div className="grid grid-cols-4 gap-y-2">
+          {ALL_PERMISSIONS.map((permission, index) => (
+            <div key={index} className="flex items-center gap-x-2">
+              <Checkbox id="checkbox" onChange={e => handleCheck(e.target.checked, permission)} />
+              <InputLabel htmlFor="checkbox">{permission}</InputLabel>
+            </div>
+          ))}
         </div>
         <div>
           <PrimaryButton type="submit">Submit</PrimaryButton>
@@ -96,13 +113,5 @@ const Form = props => {
     </form>
   );
 };
-
-export const PermissionSelection = () => (
-  <>
-    <h1>Permission</h1>
-    <InputLabel htmlFor="checkbox">test</InputLabel>
-    <Checkbox id="checkbox" />
-  </>
-);
 
 export default Form;
