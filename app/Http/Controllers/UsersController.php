@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use App\Models\Permission;
 
 class UsersController extends Controller
 {
@@ -17,7 +18,7 @@ class UsersController extends Controller
 
  public function index(Request $request)
  {
-  ACL::allowAny(['can_view_users']);
+  ACL::allowOnly(Permission::USER_PERMISSIONS);
 
   $limit = $request->query('limit');
   $search = $request->query('search');
