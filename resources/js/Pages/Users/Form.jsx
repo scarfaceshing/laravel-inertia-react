@@ -1,5 +1,6 @@
-import { ADMINISTRATOR, ALL_PERMISSIONS } from '@/constants';
-import { useEffect } from 'react';
+import _ from 'lodash';
+import { ADMINISTRATOR, ALL_PERMISSIONS, ALL_ROLES, ROLES_AND_PERMISSIONS } from '@/constants';
+import { useEffect, useRef } from 'react';
 import { useForm } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
@@ -8,6 +9,8 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 
 const Form = props => {
+  const permissionCheckboxes = useRef(null);
+
   const { data, setData, post, put, processing, errors } = useForm({
     id: props.data.id,
     username: props.data.username,
@@ -23,6 +26,10 @@ const Form = props => {
     }
   }, [data.role]);
 
+  // useEffect(() => {
+  //   console.log(data.permission);
+  // }, [data.permission]);
+
   function submit(event) {
     event.preventDefault();
 
@@ -33,14 +40,23 @@ const Form = props => {
     }
   }
 
-  function handleCheck(value, permission) {
-    if (value === true) {
-      setData('permission', [...data.permission, permission]);
-    } else if (value === false) {
-      setData('permission');
+  function handleCheckPermission(checked, value) {
+    if (checked === true) {
+      setData('permission', [...data.permission, value]);
+    } else if (checked === false) {
+      let permission = _.remove(data.permission, permission => permission === value);
+      setData('permission', permission);
     }
+  }
 
-    console.log(data.permission);
+  function handleCheckRole(checked, value) {
+    let { permissions } = ROLES_AND_PERMISSIONS.find(item => item.name === value);
+
+    Object.values(permissionCheckboxes).forEach(element => {
+      if (element !== null && permissions.includes(element.dataset.value)) {
+        element.checked = checked;
+      }
+    });
   }
 
   return (
@@ -98,11 +114,25 @@ const Form = props => {
           <InputError message={errors.password} />
         </div>
         <h1>Permissions</h1>
-        <div className="grid grid-cols-4 gap-y-2">
+        <div className="flex flex-wrap gap-y-2">
           {ALL_PERMISSIONS.map((permission, index) => (
-            <div key={index} className="flex items-center gap-x-2">
-              <Checkbox id="checkbox" onChange={e => handleCheck(e.target.checked, permission)} />
-              <InputLabel htmlFor="checkbox">{permission}</InputLabel>
+            <div key={index} className="basis-1/3 flex items-center gap-x-2">
+              <Checkbox
+                id={`checkbox-permission-${index}`}
+                ref={element => (permissionCheckboxes[index] = element)}
+                data-value={`${permission}`}
+                onChange={e => handleCheckPermission(e.target.checked, permission)}
+              />
+              <InputLabel htmlFor={`checkbox-permission-${index}`}>{permission}</InputLabel>
+            </div>
+          ))}
+        </div>
+        <h1>Roles</h1>
+        <div className="flex flex-wrap gap-y-2">
+          {ALL_ROLES.map((role, index) => (
+            <div key={index} className="basis-1/3 flex items-center gap-x-2">
+              <Checkbox id={`checkbox-role-${index}`} onChange={e => handleCheckRole(e.target.checked, role)} />
+              <InputLabel htmlFor={`checkbox-role-${index}`}>{role}</InputLabel>
             </div>
           ))}
         </div>

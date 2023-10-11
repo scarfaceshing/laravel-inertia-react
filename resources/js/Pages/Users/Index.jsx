@@ -4,7 +4,7 @@
  *
  */
 
-import { Close, Key, Pen, Trash } from '@/icons';
+import { Close, Pen, Trash } from '@/icons';
 import { formatDate } from '@/utils';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';

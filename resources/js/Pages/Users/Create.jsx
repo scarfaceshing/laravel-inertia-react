@@ -23,7 +23,7 @@ export default function Create(props) {
       <div className="grid grid-rows-2 gap-y-5">
         <div>
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-5">
-            <Form data={form} permissions={props.permissions} />
+            <Form data={form} />
           </div>
         </div>
       </div>
