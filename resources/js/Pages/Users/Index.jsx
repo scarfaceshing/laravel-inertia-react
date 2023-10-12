@@ -79,6 +79,10 @@ export default function Index(props) {
       column: 'email',
       name: 'Email',
     },
+    {
+      column: 'is_active',
+      name: 'Active',
+    },
     /**
      * Temporary comment
    {

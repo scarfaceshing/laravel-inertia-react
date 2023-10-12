@@ -19,11 +19,14 @@ class Permission extends SpatiePermission
 
  public const CAN_CHANGE_ROLE = 'can_change_role';
 
- public const USER_PERMISSIONS = [
+ public const ALL_PERMISSIONS = [
+  self::CAN_VIEW_DASHBOARD,
   self::CAN_VIEW_USERS,
   self::CAN_ADD_USERS,
   self::CAN_EDIT_USERS,
   self::CAN_DELETE_USERS,
+  self::CAN_VIEW_ROLES,
+  self::CAN_VIEW_PERMISSIONS,
   self::CAN_CHANGE_ROLE,
  ];
 }

@@ -11,7 +11,10 @@ export default function Create(props) {
     username: '',
     password: '',
     password_confirmation: '',
-    permission: [],
+    is_edit: false,
+    permissions: '',
+    roles: '',
+    is_active: false,
   });
 
   return (

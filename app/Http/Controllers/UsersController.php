@@ -18,7 +18,7 @@ class UsersController extends Controller
 
  public function index(Request $request)
  {
-  ACL::allowOnly(Permission::USER_PERMISSIONS);
+  ACL::allowOnly([Permission::CAN_VIEW_USERS]);
 
   $limit = $request->query('limit');
   $search = $request->query('search');
@@ -43,10 +43,10 @@ class UsersController extends Controller
 
  public function store(UserRequest $request)
  {
-  $data = $request->only('username', 'email', 'password', 'permissions');
+  $data = $request->only('username', 'email', 'password', 'is_active', 'permissions');
   $data['password'] = Hash::make($data['password']);
-  $user = User::create($data);
-  $user->givePermissionTo($data['permissions']);
+
+  User::create($data)->givePermissionTo($data['permissions']);
 
   return to_route('users.index');
  }
@@ -54,7 +54,9 @@ class UsersController extends Controller
  public function edit(User $user)
  {
   return Inertia::render('Users/Edit', [
-   'users' => $user->only('id', 'username', 'email'),
+   'users' => $user->only('id', 'username', 'email', 'is_active'),
+   'permissions' => $user->permissions->pluck('name'),
+   'roles' => $user->roles->pluck('name')
   ]);
  }
 
@@ -66,7 +68,8 @@ class UsersController extends Controller
    $user->update($request->only('username', 'email'));
   }
 
-  $user->assignRole($request->role);
+  // TODO: array_unique should be in front end
+  $user->syncPermissions(array_unique($request->permissions));
 
   return to_route('users.index');
  }

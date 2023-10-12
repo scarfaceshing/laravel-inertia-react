@@ -7,13 +7,6 @@ use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
- private const ALL_PERMISSIONS = [
-     ...Permission::USER_PERMISSIONS,
-     Permission::CAN_VIEW_ROLES,
-     Permission::CAN_VIEW_PERMISSIONS,
-     Permission::CAN_VIEW_DASHBOARD,
- ];
-
  /**
   * Run the migrations.
   */
@@ -21,15 +14,15 @@ return new class extends Migration
  {
   $role = Role::create(['name' => Role::ADMINISTRATOR]);
 
-  collect(self::ALL_PERMISSIONS)->each(function (string $permission = '') {
+  collect(Permission::ALL_PERMISSIONS)->each(function (string $permission = '') {
    Permission::create(['name' => $permission]);
   });
 
-  $role->givePermissionTo(self::ALL_PERMISSIONS);
+  $role->givePermissionTo(Permission::ALL_PERMISSIONS);
   $user = User::findOrFail(User::ADMINISTRATOR_ID);
 
   $user->assignRole(Role::ADMINISTRATOR);
-  $user->givePermissionTo(self::ALL_PERMISSIONS);
+  $user->givePermissionTo(Permission::ALL_PERMISSIONS);
  }
 
  /**
@@ -40,12 +33,12 @@ return new class extends Migration
   $user = User::findOrFail(User::ADMINISTRATOR_ID);
   $role = Role::findByName(Role::ADMINISTRATOR);
 
-  $user->revokePermissionTo(self::ALL_PERMISSIONS);
+  $user->revokePermissionTo(Permission::ALL_PERMISSIONS);
   $user->removeRole(Role::ADMINISTRATOR);
-  $role->revokePermissionTo(self::ALL_PERMISSIONS);
+  $role->revokePermissionTo(Permission::ALL_PERMISSIONS);
 
-  $role->whereIn('name', self::ALL_PERMISSIONS)->delete();
-  Permission::whereIn('name', self::ALL_PERMISSIONS)->delete();
+  $role->whereIn('name', Permission::ALL_PERMISSIONS)->delete();
+  Permission::whereIn('name', Permission::ALL_PERMISSIONS)->delete();
 
   $role->delete();
  }

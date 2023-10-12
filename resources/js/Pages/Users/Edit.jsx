@@ -10,7 +10,10 @@ export default function Edit(props) {
     username: props.users.username,
     password: '',
     password_confirmation: '',
-    isEdit: true,
+    is_edit: true,
+    permissions: props.permissions,
+    roles: props.roles,
+    is_active: props.users.is_active,
   };
 
   return (

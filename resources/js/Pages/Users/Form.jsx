@@ -3,6 +3,7 @@ import { ADMINISTRATOR, ALL_PERMISSIONS, ALL_ROLES, ROLES_AND_PERMISSIONS } from
 import { useEffect, useRef } from 'react';
 import { useForm } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
+import Switch from '@/Components/Switch';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -10,6 +11,8 @@ import TextInput from '@/Components/TextInput';
 
 const Form = props => {
   const permissionCheckboxes = useRef(null);
+  const rolesCheckboxes = useRef(null);
+  const activeRadiobox = useRef(null);
 
   const { data, setData, post, put, processing, errors } = useForm({
     id: props.data.id,
@@ -17,18 +20,31 @@ const Form = props => {
     email: props.data.email,
     password: props.data.password,
     password_confirmation: props.data.password_confirmation,
-    permission: props.data.permission,
+    permissions: props.data.permissions,
+    roles: props.data.roles,
+    is_edit: props.data.is_edit,
+    is_active: props.data.is_active,
   });
 
   useEffect(() => {
-    if (!data.role) {
-      setData('role', ADMINISTRATOR);
-    }
-  }, [data.role]);
+    if (!data.is_edit) return false;
 
-  // useEffect(() => {
-  //   console.log(data.permission);
-  // }, [data.permission]);
+    data.roles.forEach(role => {
+      setData('roles', role);
+      handleCheckRole(true, role);
+      Object.values(rolesCheckboxes).find(checkbox => checkbox && checkbox.dataset.value === role).checked = true;
+    });
+
+    data.permissions.forEach(permission => {
+      setData('permissions', permission);
+      handleCheckPermission(true, permission);
+      Object.values(permissionCheckboxes).find(
+        checkbox => checkbox && checkbox.dataset.value === permission
+      ).checked = true;
+    });
+
+    if (data.is_active === 1) activeRadiobox.current.checked = true;
+  }, []);
 
   function submit(event) {
     event.preventDefault();
@@ -42,10 +58,10 @@ const Form = props => {
 
   function handleCheckPermission(checked, value) {
     if (checked === true) {
-      setData('permission', [...data.permission, value]);
+      setData('permissions', [...data.permissions, value]);
     } else if (checked === false) {
-      let permission = _.remove(data.permission, permission => permission === value);
-      setData('permission', permission);
+      let permissions = data.permissions.filter(permission => permission !== value);
+      setData('permissions', permissions);
     }
   }
 
@@ -131,10 +147,19 @@ const Form = props => {
         <div className="flex flex-wrap gap-y-2">
           {ALL_ROLES.map((role, index) => (
             <div key={index} className="basis-1/3 flex items-center gap-x-2">
-              <Checkbox id={`checkbox-role-${index}`} onChange={e => handleCheckRole(e.target.checked, role)} />
+              <Checkbox
+                id={`checkbox-role-${index}`}
+                ref={element => (rolesCheckboxes[index] = element)}
+                data-value={`${role}`}
+                onChange={e => handleCheckRole(e.target.checked, role)}
+              />
               <InputLabel htmlFor={`checkbox-role-${index}`}>{role}</InputLabel>
             </div>
           ))}
+        </div>
+        <div className="grid space-y-4">
+          <h1>Active</h1>
+          <Switch ref={activeRadiobox} onChange={event => setData('isActive', event.target.checked)} />
         </div>
         <div>
           <PrimaryButton type="submit">Submit</PrimaryButton>
