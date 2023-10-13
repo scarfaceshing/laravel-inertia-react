@@ -1,11 +1,14 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import BreadCrump from '@/Components/BreadCrump';
 import Form from '@/Pages/Users/Form';
 import MainLayout from '@/Layouts/MainLayout';
+import { getUrlId } from '@/utils';
 
 export default function Edit(props) {
+  const { url } = usePage();
+
   const formData = {
-    id: props.users.id,
+    id: getUrlId(url),
     email: props.users.email,
     username: props.users.username,
     password: '',

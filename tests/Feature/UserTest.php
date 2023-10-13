@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -36,7 +37,6 @@ class UserTest extends TestCase
   $this->allowed_request_user->givePermissionTo(Permission::ALL_PERMISSIONS);
 
   $this->invalid_request_user = $this->createUser();
-  $this->dummy_user = $this->createUser();
  }
 
  public function test_users_permission_ok(): void
@@ -76,37 +76,97 @@ class UserTest extends TestCase
  public function test_users_update_user()
  {
   $password = Str::random(6);
+  $dummy_user = $this->createUser();
 
   $param = [
+   'id' => $dummy_user->id,
    'username' => $this->faker()->userName,
    'email' => $this->faker()->email,
    'password' => $password,
    'password_confirmation' => $password,
-   'is_active' => TRUE,
    'permissions' => Permission::ALL_PERMISSIONS,
+   'is_active' => false
   ];
 
   $response = $this->actingAs($this->allowed_request_user)
    ->json(
     Request::METHOD_PUT,
-    UsersController::USERS_API_URL . '/' . $this->dummy_user->id,
+    UsersController::USERS_API_URL . '/' . $dummy_user->id,
     $param
    );
 
   $response
-   ->assertValid(['username', 'email', 'password', 'password_confirmation', 'permissions'])
+   ->assertValid(['username', 'email', 'password', 'password_confirmation', 'permissions', 'is_active'])
    ->assertStatus(Response::HTTP_FOUND);
 
   $this->assertDatabaseHas('users', [
-   'id' => $this->dummy_user->id,
+   'id' => $dummy_user->id,
    'username' => $param['username'],
    'email' => $param['email'],
-   'is_active' => TRUE
+   'is_active' => false
   ]);
 
-  $dummy_user_permissions = User::findOrFail($this->dummy_user->id)->permissions;
+  $dummy_user_permissions = User::findOrFail($dummy_user->id)->permissions;
   $dummy_user_permissions = $dummy_user_permissions->pluck('name')->toArray();
 
   $this->assertEquals($dummy_user_permissions, Permission::ALL_PERMISSIONS);
+ }
+
+ public function test_users_non_dirty_update()
+ {
+  $dummy_user = $this->createUser();
+
+  $param = [
+   'id' => $dummy_user->id,
+   'username' => $dummy_user->username,
+   'email' => $dummy_user->email,
+   'password' => null,
+   'password_confirmation' => null,
+   'is_active' => false,
+   'permissions' => [],
+  ];
+
+  $response = $this->actingAs($this->allowed_request_user)
+   ->json(
+    Request::METHOD_PUT,
+    UsersController::USERS_API_URL . '/' . $dummy_user->id,
+    $param
+   );
+
+  $response
+   ->assertValid(['username', 'email', 'password', 'password_confirmation', 'permissions', 'is_active'])
+   ->assertStatus(Response::HTTP_FOUND);
+
+  $this->assertDatabaseHas('users', [
+   'id' => $dummy_user->id,
+   'username' => $param['username'],
+   'is_active' => $param['is_active'],
+   'email' => $param['email'],
+  ]);
+
+  $dummy_user_permissions = User::findOrFail($dummy_user->id)->permissions;
+  $dummy_user_permissions = $dummy_user_permissions->pluck('name')->toArray();
+
+  $this->assertEquals($dummy_user_permissions, []);
+ }
+
+ public function test_users_delete()
+ {
+  $dummy_user = $this->createUser();
+
+  $response = $this->actingAs($this->allowed_request_user)
+   ->json(
+    Request::METHOD_DELETE,
+    UsersController::USERS_API_URL . '/' . $dummy_user->id,
+   );
+
+  $response->assertStatus(Response::HTTP_OK);
+
+  $this->assertDatabaseMissing('users', [
+   'id' => $dummy_user->id,
+   'username' => $dummy_user->username,
+   'is_active' => $dummy_user->is_active,
+   'email' => $dummy_user->email,
+  ]);
  }
 }

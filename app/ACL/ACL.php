@@ -15,7 +15,7 @@ class ACL
   $is_ok = $user_permissions->contains(fn ($permission) => in_array($permission, $permissions));
 
   if (!$is_ok || !Auth::check() || $is_active === 0) {
-   // throw new InvalidPermission();
+   throw new InvalidPermission($user_permissions->toArray(), $permissions, $is_active);
   }
  }
 

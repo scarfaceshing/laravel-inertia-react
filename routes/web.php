@@ -5,6 +5,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\EmployeeController;
 use App\Jobs\TimeInJob;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -23,22 +24,24 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Auth/Login');
+ return Inertia::render('Auth/Login');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('/users', UsersController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+ Route::resource('/users', UsersController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
-    Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
-    Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+ Route::resource('/employees', EmployeeController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
-    Route::post('/time-in', function (Request $request) {
-        TimeInJob::dispatch($request)->delay(3);
-    })->name('timein');
+ Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
+ Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+
+ Route::post('/time-in', function (Request $request) {
+  TimeInJob::dispatch($request)->delay(3);
+ })->name('timein');
 });
 
 Route::get('/test', [TestController::class, 'index'])->name('test.index');

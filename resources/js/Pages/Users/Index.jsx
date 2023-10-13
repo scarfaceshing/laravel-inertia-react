@@ -82,6 +82,7 @@ export default function Index(props) {
     {
       column: 'is_active',
       name: 'Active',
+      mutate: value => (value === true ? 'Yes' : 'No'),
     },
     /**
      * Temporary comment
@@ -125,7 +126,9 @@ export default function Index(props) {
               </span>
             </SecondaryButton>
             <SecondaryButton onClick={() => onRemove(data)}>
-              <Trash />
+              <span className="text-red-500">
+                <Trash />
+              </span>
             </SecondaryButton>
           </div>
         );

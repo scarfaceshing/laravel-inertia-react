@@ -27,7 +27,6 @@ class User extends Authenticatable
   */
  protected $fillable = [
   'username',
-  'name',
   'email',
   'password',
   'is_active'
@@ -50,6 +49,7 @@ class User extends Authenticatable
   */
  protected $casts = [
   'email_verified_at' => 'datetime',
+  'is_active' => 'boolean'
  ];
 
  // TODO: add relationship for roles and permission and also add traits to easy add permission or role

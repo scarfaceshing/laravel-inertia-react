@@ -3,3 +3,4 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 dayjs.extend(localizedFormat);
 
 export const formatDate = date => dayjs(date).format('l LTS');
+export const getUrlId = url => url.split('/')[2];

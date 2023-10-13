@@ -18,7 +18,7 @@ class UsersController extends Controller
 
  public function index(Request $request)
  {
-  ACL::allowOnly([Permission::CAN_VIEW_USERS]);
+  ACL::allowOnly([Permission::CAN_ACCESS_INDEX_USERS]);
 
   $limit = $request->query('limit');
   $search = $request->query('search');
@@ -32,17 +32,21 @@ class UsersController extends Controller
    ->paginate($limit);
 
   return Inertia::render('Users/Index', [
-   'data' => $data
+   'data' => $data,
   ]);
  }
 
  public function create()
  {
+  ACL::allowOnly([Permission::CAN_ACCESS_CREATE_USERS]);
+
   return Inertia::render('Users/Create');
  }
 
  public function store(UserRequest $request)
  {
+  ACL::allowOnly([Permission::CAN_STORE_USER]);
+
   $data = $request->only('username', 'email', 'password', 'is_active', 'permissions');
   $data['password'] = Hash::make($data['password']);
 
@@ -53,8 +57,10 @@ class UsersController extends Controller
 
  public function edit(User $user)
  {
+  ACL::allowOnly([Permission::CAN_ACCESS_EDIT_USERS]);
+
   return Inertia::render('Users/Edit', [
-   'users' => $user->only('id', 'username', 'email', 'is_active'),
+   'users' => $user->only('username', 'email', 'is_active'),
    'permissions' => $user->permissions->pluck('name'),
    'roles' => $user->roles->pluck('name')
   ]);
@@ -62,6 +68,8 @@ class UsersController extends Controller
 
  public function update(User $user, UserRequest $request)
  {
+  ACL::allowOnly([Permission::CAN_UPDATE_USER]);
+
   if ($request->password) {
    $user->update($request->only('username', 'email', 'password'));
   } else {
@@ -76,6 +84,8 @@ class UsersController extends Controller
 
  public function destroy(User $user)
  {
+  ACL::allowOnly([Permission::CAN_DELETE_USERS]);
+
   User::findOrFail($user->id)->delete();
  }
 }

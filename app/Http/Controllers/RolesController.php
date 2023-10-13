@@ -5,20 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use App\Utilities\Middleware;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\ACL\ACL;
 
 class RolesController extends Controller
 {
  public const ROLES_API_URL = '/roles';
-
- public function __construct()
- {
-  $permissions = ['can_view_roles'];
-  $permissions = Middleware::extractPermissions('allowOnly', $permissions);
-  $this->middleware($permissions);
- }
 
  /**
   * Display a listing of the resource.
@@ -27,6 +21,8 @@ class RolesController extends Controller
   */
  public function index(Request $request)
  {
+  ACL::allowOnly([Permission::CAN_ACCESS_INDEX_ROLES]);
+
   $limit = $request->query('limit');
   $search = $request->query('search');
   $sort_by = $request->query('sortBy');
@@ -40,7 +36,7 @@ class RolesController extends Controller
    ->paginate($limit);
 
   return Inertia::render('Roles/Index', [
-      'roles' => $roles,
+   'roles' => $roles,
   ]);
  }
 

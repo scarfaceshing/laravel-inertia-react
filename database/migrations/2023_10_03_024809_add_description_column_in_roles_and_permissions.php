@@ -8,36 +8,54 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
- private const DESCRIPTION = [
-     [
-         'name' => Permission::CAN_VIEW_USERS,
-         'description' => 'Can view users',
-     ],
-     [
-         'name' => Permission::CAN_ADD_USERS,
-         'description' => 'Can add users',
-     ],
-     [
-         'name' => Permission::CAN_EDIT_USERS,
-         'description' => 'Can edit users',
-     ],
-     [
-         'name' => Permission::CAN_DELETE_USERS,
-         'description' => 'Can delete users',
-     ],
-     [
-         'name' => Permission::CAN_VIEW_DASHBOARD,
-         'description' => 'Can view dashboard',
-     ],
-     [
-         'name' => Permission::CAN_VIEW_ROLES,
-         'description' => 'Can view roles',
-     ],
-     [
-         'name' => Permission::CAN_VIEW_PERMISSIONS,
-         'description' => 'Can view permission',
-     ],
+ private const USERS_DESCRIPTION = [
+  [
+   'name' => Permission::CAN_ACCESS_INDEX_USERS,
+   'description' => 'Can access index users',
+  ],
+  [
+   'name' => Permission::CAN_ACCESS_CREATE_USERS,
+   'description' => 'Can access create users',
+  ],
+  [
+   'name' => Permission::CAN_ACCESS_EDIT_USERS,
+   'description' => 'Can access edit users',
+  ],
+  [
+   'name' => Permission::CAN_STORE_USER,
+   'description' => 'Can access store users',
+  ],
+  [
+   'name' => Permission::CAN_UPDATE_USER,
+   'description' => 'Can access update users',
+  ],
+  [
+   'name' => Permission::CAN_DELETE_USERS,
+   'description' => 'Can access delete users',
+  ],
  ];
+
+ private const DASHBOARD_DESCRIPTION = [
+  [
+   'name' => Permission::CAN_ACCESS_INDEX_DASHBOARD,
+   'description' => 'Can access index dashboard',
+  ],
+ ];
+
+ private const ROLES_DESCRIPTION = [
+  [
+   'name' => Permission::CAN_ACCESS_INDEX_ROLES,
+   'description' => 'Can access index roles',
+  ],
+ ];
+
+ private const PERMISSIONS_DESCRIPTION = [
+  [
+   'name' => Permission::CAN_ACCESS_INDEX_PERMISSIONS,
+   'description' => 'Can access index permissions',
+  ],
+ ];
+
 
  /**
   * Run the migrations.
@@ -55,12 +73,19 @@ return new class extends Migration
   });
 
   Role::where('name', Role::ADMINISTRATOR)->update([
-      'description' => 'Administrator',
+   'description' => 'Administrator',
   ]);
 
-  collect(self::DESCRIPTION)->each(function ($item) {
+  collect(
+   [
+    ...self::USERS_DESCRIPTION,
+    ...self::DASHBOARD_DESCRIPTION,
+    ...self::ROLES_DESCRIPTION,
+    ...self::PERMISSIONS_DESCRIPTION
+   ]
+  )->each(function ($item) {
    Permission::where('name', $item['name'])->update([
-       'description' => $item['description'],
+    'description' => $item['description'],
    ]);
   });
  }

@@ -43,13 +43,13 @@ const Form = props => {
       ).checked = true;
     });
 
-    if (data.is_active === 1) activeRadiobox.current.checked = true;
+    activeRadiobox.current.checked = data.is_active;
   }, []);
 
   function submit(event) {
     event.preventDefault();
 
-    if (props.data.isEdit === true) {
+    if (props.data.is_edit === true) {
       put(route('users.update', props.data.id));
     } else {
       post(route('users.store'));
@@ -159,7 +159,7 @@ const Form = props => {
         </div>
         <div className="grid space-y-4">
           <h1>Active</h1>
-          <Switch ref={activeRadiobox} onChange={event => setData('isActive', event.target.checked)} />
+          <Switch ref={activeRadiobox} onChange={event => setData('is_active', event.target.checked)} />
         </div>
         <div>
           <PrimaryButton type="submit">Submit</PrimaryButton>

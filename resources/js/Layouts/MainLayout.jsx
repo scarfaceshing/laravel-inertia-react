@@ -1,11 +1,49 @@
 import Navigation from '@/Components/Navigation';
 import Sidebar from '@/Components/Sidebar';
+import { Dashboard, Person } from '@/icons';
 
 export default function Authenticated({ auth, header, children }) {
+  const links = [
+    {
+      path: route('dashboard.index'),
+      icon: <Dashboard />,
+      name: 'Dashboard',
+    },
+    {
+      icon: <Person />,
+      name: 'Human Resource',
+      children: [
+        {
+          icon: null,
+          path: route('employees.index'),
+          name: "Employee's",
+        },
+      ],
+    },
+    {
+      icon: <Person />,
+      name: 'User Management',
+      children: [
+        {
+          path: route('users.index'),
+          name: 'Users',
+        },
+        {
+          path: route('roles.index'),
+          name: 'Roles',
+        },
+        {
+          path: route('permissions.index'),
+          name: 'Permissions',
+        },
+      ],
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="min-w-screen flex">
-        <Sidebar />
+        <Sidebar links={links} />
         <div className="w-full sm:ml-64">
           <Navigation auth={auth} />
           <div className="p-4 rounded-lg">

@@ -1,4 +1,4 @@
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useRef, useEffect } from 'react';
 
 export default forwardRef(function Switch({ className = '', ...props }, ref) {
   const radiobutton = ref ? ref : useRef();
