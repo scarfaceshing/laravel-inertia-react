@@ -18,20 +18,20 @@ class EmployeeController extends Controller
  public function index(Request $request)
  {
   $search = $request->query('search');
-  $sort_by = $request->query('sort_by');
-  $order_by = $request->query('ordery_by');
+  $sort_by = $request->query('sortBy');
+  $order_by = $request->query('orderBy');
   $limit = $request->query('limit');
 
-  $employee = Employee
-   ::where('employees.employee_number', 'LIKE', "%{$search}%")
-   ->where('employees.first_name', 'LIKE', "%{$search}%")
+  $employees = Employee
+   ::where('employee_number', 'LIKE', "%{$search}%")
+   ->orWhere('employees.first_name', 'LIKE', "%{$search}%")
    ->orWhere('employees.middle_name', 'LIKE', "%{$search}%")
    ->orWhere('employees.last_name', 'LIKE', "%{$search}%")
    ->when($sort_by, fn ($query) => $query->orderBy($sort_by, $order_by))
    ->paginate($limit);
 
   return Inertia::render('Employees/Index', [
-   'data' => $employee
+   'data' => $employees
   ]);
  }
 
