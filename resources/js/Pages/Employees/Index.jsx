@@ -1,5 +1,5 @@
 import { Close } from '@/icons';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import BreadCrump from '@/Components/BreadCrump';
 import DynamicTable, { TableHeader } from '@/Components/DynamicTable';
@@ -36,6 +36,42 @@ export default function Index(props) {
       column: 'first_name',
       name: 'First name',
     },
+    {
+      column: 'middle_name',
+      name: 'Middle name',
+    },
+    {
+      column: 'last_name',
+      name: 'Last name',
+    },
+    {
+      column: 'birth_date',
+      name: 'Birth date',
+    },
+    {
+      column: 'hired_date',
+      name: 'Hired date',
+    },
+    {
+      column: 'regularization',
+      name: 'Regularization',
+    },
+    {
+      column: 'department',
+      name: 'Department',
+    },
+    {
+      column: 'position',
+      name: 'Position',
+    },
+    {
+      column: 'sex',
+      name: 'Gender',
+    },
+    {
+      column: 'civil_status',
+      name: 'Civil status',
+    },
   ];
 
   useEffect(() => {
@@ -70,7 +106,9 @@ export default function Index(props) {
           <div className="bg-white p-2">
             <div className="overflow-hidden">
               <TableHeader>
-                <PrimaryButton>Create</PrimaryButton>
+                <Link href={route('employees.create')}>
+                  <PrimaryButton>Create</PrimaryButton>
+                </Link>
                 <div className="flex justify-between py-2">
                   <div>
                     <InputLabel htmlFor="search">Search</InputLabel>

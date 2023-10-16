@@ -27,23 +27,23 @@ const Form = props => {
   });
 
   useEffect(() => {
-    if (!data.is_edit) return false;
+    if (data.is_edit) {
+      data.roles.forEach(role => {
+        setData('roles', role);
+        handleCheckRole(true, role);
+        Object.values(rolesCheckboxes).find(checkbox => checkbox && checkbox.dataset.value === role).checked = true;
+      });
 
-    data.roles.forEach(role => {
-      setData('roles', role);
-      handleCheckRole(true, role);
-      Object.values(rolesCheckboxes).find(checkbox => checkbox && checkbox.dataset.value === role).checked = true;
-    });
+      data.permissions.forEach(permission => {
+        setData('permissions', permission);
+        handleCheckPermission(true, permission);
+        Object.values(permissionCheckboxes).find(
+          checkbox => checkbox && checkbox.dataset.value === permission
+        ).checked = true;
+      });
 
-    data.permissions.forEach(permission => {
-      setData('permissions', permission);
-      handleCheckPermission(true, permission);
-      Object.values(permissionCheckboxes).find(
-        checkbox => checkbox && checkbox.dataset.value === permission
-      ).checked = true;
-    });
-
-    activeRadiobox.current.checked = data.is_active;
+      activeRadiobox.current.checked = data.is_active;
+    }
   }, []);
 
   function submit(event) {
