@@ -1,9 +1,14 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\EmployeeController;
+use App\Jobs\TimeInJob;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,23 +24,26 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Auth/Login');
+ return Inertia::render('Auth/Login');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/user-management', [UserController::class, 'index'])->name('user-management.index');
-    Route::get('/user-management/create', [UserController::class, 'create'])->name('user-management.create');
-    Route::post('/user-management/store', [UserController::class, 'store'])->name('user-management.store');
-    Route::get('/user-management/{user}/edit', [UserController::class, 'edit'])->name('user-management.edit');
-    Route::put('/user-management/{user}', [UserController::class, 'update'])->name('user-management.update');
-    Route::delete('/user-management/{user}/destroy', [UserController::class, 'destroy'])->name('user-management.destroy');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+ Route::resource('/users', UsersController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+ Route::resource('/employees', EmployeeController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+ Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
+ Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+
+ Route::post('/time-in', function (Request $request) {
+  TimeInJob::dispatch($request)->delay(3);
+ })->name('timein');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/test', [TestController::class, 'index'])->name('test.index');
+
+require __DIR__ . '/auth.php';

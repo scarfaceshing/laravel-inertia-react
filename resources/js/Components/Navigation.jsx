@@ -2,6 +2,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { useState } from 'react';
+import { CarretDown } from '@/icons';
 
 export default function Navigation(props) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -25,7 +26,7 @@ export default function Navigation(props) {
                       type="button"
                       className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                     >
-                      {props.auth.user.name}
+                      {props.auth.user.username}
 
                       <svg
                         className="ml-2 -mr-0.5 h-4 w-4"
@@ -86,7 +87,7 @@ export default function Navigation(props) {
           </div>
 
           <div className="mt-3 space-y-1">
-            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+            <ResponsiveNavLink href="#">Profile</ResponsiveNavLink>
             <ResponsiveNavLink method="post" href={route('logout')} as="button">
               Log Out
             </ResponsiveNavLink>

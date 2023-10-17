@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import _ from 'lodash';
+
 export default function Select({ options, handleChange }) {
   return (
     <select
@@ -6,9 +9,18 @@ export default function Select({ options, handleChange }) {
     >
       {options.map(option => (
         <option key={option} value={option}>
-          {option}
+          {displayValue(option)}
         </option>
       ))}
     </select>
   );
 }
+
+const trimString = value => {
+  value = _.replace(value, '_', ' ');
+  value = _.capitalize(value);
+
+  return value;
+};
+
+const displayValue = value => <>{trimString(value)}</>;

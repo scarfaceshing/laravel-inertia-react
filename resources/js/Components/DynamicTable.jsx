@@ -2,6 +2,23 @@ import { useRef, useState } from 'react';
 import BasicButton from '@/Components/BasicButton';
 import { CaretLeft, CaretRight } from '@/icons';
 
+/**
+ * TODO: remove emit method and change to event listener and http request data should inside the component
+ */
+
+/**
+ * @param data object // response backend data.
+ * @param column array // table column.
+ * @param sortColumn function(sortBy, orderBy) // call back function to sort columns.
+ * @param totalPages integer // for displaying total pages.
+ * @param fromPage integer // for displaying from page.
+ * @param toPage integer // for displaying to page.
+ * @param links string // for displaying http link every click pages.
+ * @param pageAction function // callback function for previous and next.
+ *
+ * @return JSX.element // <DynamicTable />
+ */
+
 const ASCENDING = 'ASC';
 const DESCENDING = 'DESC';
 
@@ -108,10 +125,11 @@ const Pagination = ({ currentPage, pageAction, links = {} }) => {
           {links.map((item, index) => (
             <li key={index}>
               <BasicButton
+                disabled={item.label === '...' ? true : false}
                 onClick={() => handleClick(item)}
                 className={`${
                   item.active ? 'text-blue-500 bg-blue-100' : 'text-gray-500'
-                } flex items-center justify-center px-3 h-8 leading-tight bg-white hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  border-gray-300 hover:bg-gray-100`}
+                } flex items-center justify-center px-3 h-8 leading-tight bg-white hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white border dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  border-gray-300 hover:bg-gray-100`}
               >
                 <PaginateButton label={item.label} />
               </BasicButton>

@@ -4,8 +4,9 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
+import _ from 'lodash';
 
 export default function Login({ status, canResetPassword }) {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -45,7 +46,7 @@ export default function Login({ status, canResetPassword }) {
             type="text"
             name="username"
             value={data.username}
-            className="mt-1 block w-full"
+            className={`mt-1 block w-full ${_.isEmpty(errors) ? 'border-gray-500' : 'border-red-500'} `}
             autoComplete="username"
             isFocused={true}
             onChange={handleOnChange}
@@ -62,7 +63,7 @@ export default function Login({ status, canResetPassword }) {
             type="password"
             name="password"
             value={data.password}
-            className="mt-1 block w-full"
+            className={`mt-1 block w-full ${_.isEmpty(errors) ? 'border-gray-500' : 'border-red-500'} `}
             autoComplete="current-password"
             onChange={handleOnChange}
           />

@@ -29,6 +29,16 @@ npm run dev
 npm run pre-commit
 ```
 
+### Bypass pre-commit
+
+```
+rm -rvf ./husky/hooks
+npm install
+git add .
+git commit -m "<commit>" --no-verify
+git push
+```
+
 ### Documentations
 
 <div>https://www.luckymedia.dev/blog/laravel-breeze-with-inertia-react-eslint-prettier-pint-and-husky</div>

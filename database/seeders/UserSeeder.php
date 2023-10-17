@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
+use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -13,8 +15,12 @@ class UserSeeder extends Seeder
 
     public function run()
     {
+
+        $faker = Faker::create();
         /* TODO: Create if not exist to the given data */
 
-        User::factory(250)->create(self::USER);
+        $user = User::factory()->create(self::USER);
+        $role = $faker->randomElement(ROLE::ALL_ROLES);
+        $user->assignRole($role);
     }
 }
