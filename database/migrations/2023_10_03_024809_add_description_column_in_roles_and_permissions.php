@@ -32,7 +32,7 @@ return new class extends Migration
   [
    'name' => Permission::CAN_DELETE_USERS,
    'description' => 'Can access delete users',
-  ],
+  ]
  ];
 
  private const DASHBOARD_DESCRIPTION = [

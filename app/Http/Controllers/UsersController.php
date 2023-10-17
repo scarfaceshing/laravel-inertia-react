@@ -38,26 +38,28 @@ class UsersController extends Controller
 
  public function create()
  {
-  ACL::allowOnly([Permission::CAN_ACCESS_CREATE_USERS]);
+  ACL::allowOnly([Permission::CAN_ACCESS_CREATE_USERS, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
 
   return Inertia::render('Users/Create');
  }
 
  public function store(UserRequest $request)
  {
-  ACL::allowOnly([Permission::CAN_STORE_USER]);
+  ACL::allowOnly([Permission::CAN_STORE_USER, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
 
-  $data = $request->only('username', 'email', 'password', 'is_active', 'permissions');
+  $data = $request->only('username', 'email', 'password', 'is_active', 'permissions', 'roles');
   $data['password'] = Hash::make($data['password']);
 
-  User::create($data)->givePermissionTo($data['permissions']);
+  $user = User::create($data);
+  $user->givePermissionTo(array_unique($data['permissions']));
+  $user->assignRole(array_unique($data['roles']));
 
   return to_route('users.index');
  }
 
  public function edit(User $user)
  {
-  ACL::allowOnly([Permission::CAN_ACCESS_EDIT_USERS]);
+  ACL::allowOnly([Permission::CAN_ACCESS_EDIT_USERS, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
 
   return Inertia::render('Users/Edit', [
    'users' => $user->only('username', 'email', 'is_active'),
@@ -68,7 +70,7 @@ class UsersController extends Controller
 
  public function update(User $user, UserRequest $request)
  {
-  ACL::allowOnly([Permission::CAN_UPDATE_USER]);
+  ACL::allowOnly([Permission::CAN_UPDATE_USER, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
 
   if ($request->password) {
    $user->update($request->only('username', 'email', 'password'));
@@ -78,6 +80,7 @@ class UsersController extends Controller
 
   // TODO: array_unique should be in front end
   $user->syncPermissions(array_unique($request->permissions));
+  $user->syncRoles(array_unique($request->roles));
 
   return to_route('users.index');
  }

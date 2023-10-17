@@ -17,6 +17,8 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import Select from '@/Components/Select';
 import TextInput from '@/Components/TextInput';
+import { AllowOnly } from '@/Components/PermissionFilter';
+import { CAN_ACCESS_INDEX_USERS } from '@/constants';
 
 export default function Index(props) {
   const [search, setSearch] = useState('');
@@ -157,72 +159,74 @@ export default function Index(props) {
 
   return (
     <MainLayout auth={props.auth} errors={props.errors}>
-      <Head title="User Management" />
-      <div>
-        <div className="pb-5">
-          <BreadCrump
-            path={[
-              {
-                name: 'test',
-                icon: 'test',
-              },
-            ]}
-          />
-        </div>
+      <AllowOnly permissions={[CAN_ACCESS_INDEX_USERS]} userPermissions={props.auth.permissions}>
+        <Head title="User Management" />
         <div>
-          <div className="bg-white p-2">
-            <div className="overflow-hidden">
-              <TableHeader>
-                <PrimaryButton onClick={() => router.get(route('users.create'))}>Create</PrimaryButton>
-                <div className="flex justify-between py-2">
-                  <div>
-                    <InputLabel htmlFor="search">Search</InputLabel>
-                    <TextInput
-                      id="search"
-                      className="text-sm"
-                      value={search}
-                      onChange={e => setSearch(e.target.value)}
-                    />
+          <div className="pb-5">
+            <BreadCrump
+              path={[
+                {
+                  name: 'test',
+                  icon: 'test',
+                },
+              ]}
+            />
+          </div>
+          <div>
+            <div className="bg-white p-2">
+              <div className="overflow-hidden">
+                <TableHeader>
+                  <PrimaryButton onClick={() => router.get(route('users.create'))}>Create</PrimaryButton>
+                  <div className="flex justify-between py-2">
+                    <div>
+                      <InputLabel htmlFor="search">Search</InputLabel>
+                      <TextInput
+                        id="search"
+                        className="text-sm"
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                      />
+                    </div>
+                    <div className="pt-5">
+                      <Select options={lengthMenu} handleChange={value => setLimit(value)} />
+                    </div>
                   </div>
-                  <div className="pt-5">
-                    <Select options={lengthMenu} handleChange={value => setLimit(value)} />
-                  </div>
-                </div>
-              </TableHeader>
-              <DynamicTable
-                data={props.data.data}
-                columns={columns}
-                sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
-                totalPages={totalPages}
-                fromPage={fromPage}
-                toPage={toPage}
-                links={links}
-                pageAction={value => pageAction(value)}
-              />
+                </TableHeader>
+                <DynamicTable
+                  data={props.data.data}
+                  columns={columns}
+                  sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)}
+                  totalPages={totalPages}
+                  fromPage={fromPage}
+                  toPage={toPage}
+                  links={links}
+                  pageAction={value => pageAction(value)}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <Modal show={showModal}>
-        <div className="flex justify-end">
-          <div className="p-2" onClick={() => setShowModal(false)}>
-            <Close />
+        <Modal show={showModal}>
+          <div className="flex justify-end">
+            <div className="p-2" onClick={() => setShowModal(false)}>
+              <Close />
+            </div>
           </div>
-        </div>
-        <div className="h-64 flex flex-col sm:justify-center items-center gap-2">
-          <h1>Are you sure to delete?</h1>
-          <div className="text-center mb-2">
-            <p>{userData.username}</p>
-            <p>{userData.email}</p>
+          <div className="h-64 flex flex-col sm:justify-center items-center gap-2">
+            <h1>Are you sure to delete?</h1>
+            <div className="text-center mb-2">
+              <p>{userData.username}</p>
+              <p>{userData.email}</p>
+            </div>
+            <div className="flex gap-x-3">
+              <PrimaryButton className="px-7" onClick={() => remove(userData)}>
+                Yes
+              </PrimaryButton>
+              <SecondaryButton onClick={() => setShowModal(false)}>Cancel</SecondaryButton>
+            </div>
           </div>
-          <div className="flex gap-x-3">
-            <PrimaryButton className="px-7" onClick={() => remove(userData)}>
-              Yes
-            </PrimaryButton>
-            <SecondaryButton onClick={() => setShowModal(false)}>Cancel</SecondaryButton>
-          </div>
-        </div>
-      </Modal>
+        </Modal>
+      </AllowOnly>
     </MainLayout>
   );
 }

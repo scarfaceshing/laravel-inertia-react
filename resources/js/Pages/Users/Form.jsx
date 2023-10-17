@@ -73,6 +73,13 @@ const Form = props => {
         element.checked = checked;
       }
     });
+
+    if (checked === true) {
+      setData('roles', [...data.roles, value]);
+    } else if (checked === false) {
+      let roles = data.roles.filter(role => role !== value);
+      setData('roles', roles);
+    }
   }
 
   return (

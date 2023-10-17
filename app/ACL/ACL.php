@@ -11,6 +11,7 @@ class ACL
  public static function allowAny(array $permissions = []): void
  {
   $user_permissions = auth()->user()->permissions->pluck('name');
+//   dd($user_permissions);
   $is_active = auth()->user()->is_active;
   $is_ok = $user_permissions->contains(fn ($permission) => in_array($permission, $permissions));
 
@@ -23,12 +24,13 @@ class ACL
  {
   $is_active = auth()->user()->is_active;
   $user_permissions = auth()->user()->permissions->pluck('name');
+//   dd($user_permissions);
 
   $is_ok = collect($permissions)->every(function ($permission) use ($user_permissions) {
    return $user_permissions->contains($permission);
   });
 
-  if (!$is_ok || !Auth::check() || $is_active === 0) {
+  if (!$is_ok || !Auth::check() || !$is_active) {
    throw new InvalidPermission($user_permissions->toArray(), $permissions, $is_active);
   }
  }
