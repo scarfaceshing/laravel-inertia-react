@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Events\ImportEmployeesEvent;
+use Illuminate\Support\Facades\Redirect;
 
 class TestController extends Controller
 {
@@ -22,5 +24,12 @@ class TestController extends Controller
   return Inertia::render('Test/Index', [
       'response' => $data,
   ]);
+ }
+
+ public function trigger()
+ {
+    ImportEmployeesEvent::dispatch('test');
+    
+    return Redirect::route('test.index');
  }
 }

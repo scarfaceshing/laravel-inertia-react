@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\EmployeeController;
 use App\Jobs\TimeInJob;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -46,4 +46,4 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/test', [TestController::class, 'index'])->name('test.index');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

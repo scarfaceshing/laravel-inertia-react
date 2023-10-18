@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use App\ACL\ACL;
 use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\ACL\ACL;
 
 class RolesController extends Controller
 {
@@ -36,7 +36,7 @@ class RolesController extends Controller
    ->paginate($limit);
 
   return Inertia::render('Roles/Index', [
-   'roles' => $roles,
+      'roles' => $roles,
   ]);
  }
 

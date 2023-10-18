@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\ACL\ACL;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\ACL\ACL;
 
 class PermissionController extends Controller
 {
@@ -32,7 +32,7 @@ class PermissionController extends Controller
    ->paginate($limit);
 
   return Inertia::render('Permissions/Index', [
-   'permissions' => $permissions,
+      'permissions' => $permissions,
   ]);
  }
 

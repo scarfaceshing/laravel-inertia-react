@@ -26,10 +26,10 @@ class User extends Authenticatable
   * @var array<int, string>
   */
  protected $fillable = [
-  'username',
-  'email',
-  'password',
-  'is_active'
+     'username',
+     'email',
+     'password',
+     'is_active',
  ];
 
  /**
@@ -38,8 +38,8 @@ class User extends Authenticatable
   * @var array<int, string>
   */
  protected $hidden = [
-  'password',
-  'remember_token',
+     'password',
+     'remember_token',
  ];
 
  /**
@@ -48,8 +48,8 @@ class User extends Authenticatable
   * @var array<string, string>
   */
  protected $casts = [
-  'email_verified_at' => 'datetime',
-  'is_active' => 'boolean'
+     'email_verified_at' => 'datetime',
+     'is_active' => 'boolean',
  ];
 
  // TODO: add relationship for roles and permission and also add traits to easy add permission or role

@@ -6,11 +6,11 @@ namespace App\Http\Controllers;
 
 use App\ACL\ACL;
 use App\Http\Requests\UserRequest;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-use App\Models\Permission;
 
 class UsersController extends Controller
 {
@@ -32,7 +32,7 @@ class UsersController extends Controller
    ->paginate($limit);
 
   return Inertia::render('Users/Index', [
-   'data' => $data,
+      'data' => $data,
   ]);
  }
 
@@ -62,9 +62,9 @@ class UsersController extends Controller
   ACL::allowOnly([Permission::CAN_ACCESS_EDIT_USERS, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
 
   return Inertia::render('Users/Edit', [
-   'users' => $user->only('username', 'email', 'is_active'),
-   'permissions' => $user->permissions->pluck('name'),
-   'roles' => $user->roles->pluck('name')
+      'users' => $user->only('username', 'email', 'is_active'),
+      'permissions' => $user->permissions->pluck('name'),
+      'roles' => $user->roles->pluck('name'),
   ]);
  }
 

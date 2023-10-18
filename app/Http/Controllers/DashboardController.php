@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use App\ACL\ACL;
 use App\Models\Permission;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -13,7 +13,7 @@ class DashboardController extends Controller
   ACL::allowAny([Permission::CAN_ACCESS_INDEX_DASHBOARD]);
 
   return Inertia::render('Dashboard/Index', [
-   'test' => 'test',
+      'test' => 'test',
   ]);
  }
 }

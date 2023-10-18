@@ -8,10 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -22,7 +19,9 @@ class UserTest extends TestCase
  use RefreshDatabase;
 
  private $allowed_request_user;
+
  private $invalid_request_user;
+
  private $dummy_user;
 
  /**
@@ -60,11 +59,11 @@ class UserTest extends TestCase
   $password = Str::random(6);
 
   $param = [
-   'username' => $this->faker()->userName,
-   'email' => $this->faker()->email,
-   'password' => $password,
-   'password_confirmation' => $password,
-   'permissions' => Permission::ALL_PERMISSIONS,
+      'username' => $this->faker()->userName,
+      'email' => $this->faker()->email,
+      'password' => $password,
+      'password_confirmation' => $password,
+      'permissions' => Permission::ALL_PERMISSIONS,
   ];
 
   $response = $this->actingAs($this->allowed_request_user)
@@ -79,19 +78,19 @@ class UserTest extends TestCase
   $dummy_user = $this->createUser();
 
   $param = [
-   'id' => $dummy_user->id,
-   'username' => $this->faker()->userName,
-   'email' => $this->faker()->email,
-   'password' => $password,
-   'password_confirmation' => $password,
-   'permissions' => Permission::ALL_PERMISSIONS,
-   'is_active' => false
+      'id' => $dummy_user->id,
+      'username' => $this->faker()->userName,
+      'email' => $this->faker()->email,
+      'password' => $password,
+      'password_confirmation' => $password,
+      'permissions' => Permission::ALL_PERMISSIONS,
+      'is_active' => false,
   ];
 
   $response = $this->actingAs($this->allowed_request_user)
    ->json(
     Request::METHOD_PUT,
-    UsersController::USERS_API_URL . '/' . $dummy_user->id,
+    UsersController::USERS_API_URL.'/'.$dummy_user->id,
     $param
    );
 
@@ -100,10 +99,10 @@ class UserTest extends TestCase
    ->assertStatus(Response::HTTP_FOUND);
 
   $this->assertDatabaseHas('users', [
-   'id' => $dummy_user->id,
-   'username' => $param['username'],
-   'email' => $param['email'],
-   'is_active' => false
+      'id' => $dummy_user->id,
+      'username' => $param['username'],
+      'email' => $param['email'],
+      'is_active' => false,
   ]);
 
   $dummy_user_permissions = User::findOrFail($dummy_user->id)->permissions;
@@ -117,19 +116,19 @@ class UserTest extends TestCase
   $dummy_user = $this->createUser();
 
   $param = [
-   'id' => $dummy_user->id,
-   'username' => $dummy_user->username,
-   'email' => $dummy_user->email,
-   'password' => null,
-   'password_confirmation' => null,
-   'is_active' => false,
-   'permissions' => [],
+      'id' => $dummy_user->id,
+      'username' => $dummy_user->username,
+      'email' => $dummy_user->email,
+      'password' => null,
+      'password_confirmation' => null,
+      'is_active' => false,
+      'permissions' => [],
   ];
 
   $response = $this->actingAs($this->allowed_request_user)
    ->json(
     Request::METHOD_PUT,
-    UsersController::USERS_API_URL . '/' . $dummy_user->id,
+    UsersController::USERS_API_URL.'/'.$dummy_user->id,
     $param
    );
 
@@ -138,10 +137,10 @@ class UserTest extends TestCase
    ->assertStatus(Response::HTTP_FOUND);
 
   $this->assertDatabaseHas('users', [
-   'id' => $dummy_user->id,
-   'username' => $param['username'],
-   'is_active' => $param['is_active'],
-   'email' => $param['email'],
+      'id' => $dummy_user->id,
+      'username' => $param['username'],
+      'is_active' => $param['is_active'],
+      'email' => $param['email'],
   ]);
 
   $dummy_user_permissions = User::findOrFail($dummy_user->id)->permissions;
@@ -157,16 +156,16 @@ class UserTest extends TestCase
   $response = $this->actingAs($this->allowed_request_user)
    ->json(
     Request::METHOD_DELETE,
-    UsersController::USERS_API_URL . '/' . $dummy_user->id,
+    UsersController::USERS_API_URL.'/'.$dummy_user->id,
    );
 
   $response->assertStatus(Response::HTTP_OK);
 
   $this->assertDatabaseMissing('users', [
-   'id' => $dummy_user->id,
-   'username' => $dummy_user->username,
-   'is_active' => $dummy_user->is_active,
-   'email' => $dummy_user->email,
+      'id' => $dummy_user->id,
+      'username' => $dummy_user->username,
+      'is_active' => $dummy_user->is_active,
+      'email' => $dummy_user->email,
   ]);
  }
 }

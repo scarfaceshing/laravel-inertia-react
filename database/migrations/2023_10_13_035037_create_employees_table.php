@@ -1,76 +1,76 @@
 <?php
 
+use App\Constants\Constants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Constants\Constants;
 
 return new class extends Migration
 {
   private const COLUMNS = [
-    [
-      'column_name' => 'employee_number',
-      'data_type' => 'string',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'first_name',
-      'data_type' => 'string',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'middle_name',
-      'data_type' => 'string',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'last_name',
-      'data_type' => 'string',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'birth_date',
-      'data_type' => 'date',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'hired_date',
-      'data_type' => 'date',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'regularization',
-      'data_type' => 'enum',
-      'value' => Constants::REGULARIZATION,
-      'default' => 'probitionary'
-    ],
-    [
-      'column_name' => 'department',
-      'data_type' => 'string',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'position',
-      'data_type' => 'string',
-      'default' => 'nullable'
-    ],
-    [
-      'column_name' => 'sex',
-      'data_type' => 'enum',
-      'value' => Constants::SEX,
-      'default' => 'male'
-    ],
-    [
-      'column_name' => 'civil_status',
-      'data_type' => 'enum',
-      'value' => Constants::CIVIL_STATUS,
-      'default' => 'single'
-    ],
-    [
-      'column_name' => 'is_active',
-      'data_type' => 'boolean',
-      'default' => false
-    ],
+      [
+          'column_name' => 'employee_number',
+          'data_type' => 'string',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'first_name',
+          'data_type' => 'string',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'middle_name',
+          'data_type' => 'string',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'last_name',
+          'data_type' => 'string',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'birth_date',
+          'data_type' => 'date',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'hired_date',
+          'data_type' => 'date',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'regularization',
+          'data_type' => 'enum',
+          'value' => Constants::REGULARIZATION,
+          'default' => 'probitionary',
+      ],
+      [
+          'column_name' => 'department',
+          'data_type' => 'string',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'position',
+          'data_type' => 'string',
+          'default' => 'nullable',
+      ],
+      [
+          'column_name' => 'sex',
+          'data_type' => 'enum',
+          'value' => Constants::SEX,
+          'default' => 'male',
+      ],
+      [
+          'column_name' => 'civil_status',
+          'data_type' => 'enum',
+          'value' => Constants::CIVIL_STATUS,
+          'default' => 'single',
+      ],
+      [
+          'column_name' => 'is_active',
+          'data_type' => 'boolean',
+          'default' => false,
+      ],
   ];
 
   /**

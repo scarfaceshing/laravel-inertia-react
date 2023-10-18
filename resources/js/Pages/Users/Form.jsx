@@ -10,9 +10,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 
 const Form = props => {
-  const permissionCheckboxes = useRef(null);
-  const rolesCheckboxes = useRef(null);
-  const activeRadiobox = useRef(null);
+  const activeRadiobox = useRef();
 
   const { data, setData, post, put, processing, errors } = useForm({
     id: props.data.id,
@@ -26,25 +24,25 @@ const Form = props => {
     is_active: props.data.is_active,
   });
 
-  useEffect(() => {
-    if (data.is_edit) {
-      data.roles.forEach(role => {
-        setData('roles', role);
-        handleCheckRole(true, role);
-        Object.values(rolesCheckboxes).find(checkbox => checkbox && checkbox.dataset.value === role).checked = true;
-      });
+  // useEffect(() => {
+  //   if (data.is_edit) {
+  //     data.roles.forEach(role => {
+  //       setData('roles', role);
+  //       handleCheckRole(true, role);
+  //       Object.values(rolesCheckboxes).find(checkbox => checkbox && checkbox.dataset.value === role).checked = true;
+  //     });
 
-      data.permissions.forEach(permission => {
-        setData('permissions', permission);
-        handleCheckPermission(true, permission);
-        Object.values(permissionCheckboxes).find(
-          checkbox => checkbox && checkbox.dataset.value === permission
-        ).checked = true;
-      });
+  //     data.permissions.forEach(permission => {
+  //       setData('permissions', permission);
+  //       handleCheckPermission(true, permission);
+  //       Object.values(permissionCheckboxes).find(
+  //         checkbox => checkbox && checkbox.dataset.value === permission
+  //       ).checked = true;
+  //     });
 
-      activeRadiobox.current.checked = data.is_active;
-    }
-  }, []);
+  //     activeRadiobox.current.checked = data.is_active;
+  //   }
+  // }, []);
 
   function submit(event) {
     event.preventDefault();
@@ -56,30 +54,41 @@ const Form = props => {
     }
   }
 
-  function handleCheckPermission(checked, value) {
+  // function handleCheckPermission(checked, value) {
+  //   if (checked === true) {
+  //     setData('permissions', [...data.permissions, value]);
+  //   } else if (checked === false) {
+  //     let permissions = data.permissions.filter(permission => permission !== value);
+  //     setData('permissions', permissions);
+  //   }
+  // }
+
+  // function handleCheckRole(checked, value) {
+  //   let { permissions } = ROLES_AND_PERMISSIONS.find(item => item.name === value);
+  //   Object.values(permissionCheckboxes).forEach(element => {
+  //     if (element !== null && permissions.includes(element.dataset.value)) {
+  //       element.checked = checked;
+  //     }
+  //   });
+
+  //   if (checked === true) {
+  //     setData('roles', [...data.roles, value]);
+  //   } else if (checked === false) {
+  //     let roles = data.roles.filter(role => role !== value);
+  //     setData('roles', roles);
+  //   }
+  // }
+
+  useEffect(() => {
+    console.log(data.permissions);
+  }, [data.permissions]);
+
+  function handleCheckbox(type, key, checked) {
     if (checked === true) {
-      setData('permissions', [...data.permissions, value]);
-    } else if (checked === false) {
-      let permissions = data.permissions.filter(permission => permission !== value);
-      setData('permissions', permissions);
+      // setData('permissions');
     }
-  }
-
-  function handleCheckRole(checked, value) {
-    let { permissions } = ROLES_AND_PERMISSIONS.find(item => item.name === value);
-
-    Object.values(permissionCheckboxes).forEach(element => {
-      if (element !== null && permissions.includes(element.dataset.value)) {
-        element.checked = checked;
-      }
-    });
-
-    if (checked === true) {
-      setData('roles', [...data.roles, value]);
-    } else if (checked === false) {
-      let roles = data.roles.filter(role => role !== value);
-      setData('roles', roles);
-    }
+    // console.log('target', data.permissions);
+    // console.log(type, key, checked);
   }
 
   return (
@@ -140,13 +149,12 @@ const Form = props => {
         <div className="flex flex-wrap gap-y-2">
           {ALL_PERMISSIONS.map((permission, index) => (
             <div key={index} className="basis-1/3 flex items-center gap-x-2">
-              <Checkbox
-                id={`checkbox-permission-${index}`}
-                ref={element => (permissionCheckboxes[index] = element)}
-                data-value={`${permission}`}
-                onChange={e => handleCheckPermission(e.target.checked, permission)}
+              <input
+                id={`permission-${index}`}
+                type="checkbox"
+                onChange={event => handleCheckbox('permission', permission, event.target.checked)}
               />
-              <InputLabel htmlFor={`checkbox-permission-${index}`}>{permission}</InputLabel>
+              <InputLabel htmlFor={`permission-${index}`}>{permission}</InputLabel>
             </div>
           ))}
         </div>
@@ -154,16 +162,16 @@ const Form = props => {
         <div className="flex flex-wrap gap-y-2">
           {ALL_ROLES.map((role, index) => (
             <div key={index} className="basis-1/3 flex items-center gap-x-2">
-              <Checkbox
-                id={`checkbox-role-${index}`}
-                ref={element => (rolesCheckboxes[index] = element)}
-                data-value={`${role}`}
-                onChange={e => handleCheckRole(e.target.checked, role)}
+              <input
+                id={`roles-${index}`}
+                type="checkbox"
+                onChange={event => handleCheckbox('role', role, event.target.checked)}
               />
-              <InputLabel htmlFor={`checkbox-role-${index}`}>{role}</InputLabel>
+              <InputLabel htmlFor={`roles-${index}`}>{role}</InputLabel>
             </div>
           ))}
         </div>
+        <div>{JSON.stringify(data)}</div>
         <div className="grid space-y-4">
           <h1>Active</h1>
           <Switch ref={activeRadiobox} onChange={event => setData('is_active', event.target.checked)} />
@@ -177,3 +185,21 @@ const Form = props => {
 };
 
 export default Form;
+
+{
+  /* <div className="flex flex-wrap gap-y-2">
+{ALL_PERMISSIONS.map((permission, index) => (
+  <div key={index} className="basis-1/3 flex items-center gap-x-2">
+    <h1>{permission}</h1>
+  </div>
+))}
+</div>
+<h1>Roles</h1>
+<div className="flex flex-wrap gap-y-2">
+{ALL_ROLES.map((role, index) => (
+  <div key={index} className="basis-1/3 flex items-center gap-x-2">
+    <h1>{role}</h1>
+  </div>
+))}
+</div> */
+}

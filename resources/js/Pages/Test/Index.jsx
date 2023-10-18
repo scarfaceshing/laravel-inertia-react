@@ -2,6 +2,10 @@ import TempDynamicTable from '@/Components/TempDynamicTable';
 import { useEffect, useState } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 
+window.Echo.channel(`my-channel`).listen('.my-event', e => {
+  console.log(e);
+});
+
 export default function Index(props) {
   const { response } = usePage().props;
 
@@ -55,6 +59,9 @@ export default function Index(props) {
 
   return (
     <div>
+      <button type="button" onClick={() => router.post(route('test'), {})} className="bg-gray-500 p-2 m-5">
+        Event
+      </button>
       <TempDynamicTable data={response.data} columns={columns} lengthMenu={[10, 50, 100]}>
         <TempDynamicTable.TableComponent sortColumn={(sortBy, orderBy) => sortColumn(sortBy, orderBy)} />
       </TempDynamicTable>

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Constants\Constants;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
@@ -19,7 +19,7 @@ class EmployeeFactory extends Factory
     public function definition()
     {
         $employee_number = strtoupper($this->faker->shuffle(
-            $this->faker->randomNumber($nbDigits = NULL, $strict = false) . Str::random(5)
+            $this->faker->randomNumber($nbDigits = null, $strict = false).Str::random(5)
         ));
 
         return [
@@ -35,7 +35,7 @@ class EmployeeFactory extends Factory
             'sex' => $this->faker->randomElement(Constants::SEX),
             'civil_status' => $this->faker->randomElement(Constants::CIVIL_STATUS),
             'deleted_at' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
-            'is_active' => $this->faker->randomElement([true, false])
+            'is_active' => $this->faker->randomElement([true, false]),
         ];
     }
 }
