@@ -8,6 +8,8 @@ import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import _ from 'lodash';
 
+window.Echo.channel('my-channel').listen('.my-event', e => console.log(e));
+
 export default function Login({ status, canResetPassword }) {
   const { data, setData, post, processing, errors, reset } = useForm({
     username: '',
