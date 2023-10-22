@@ -1,6 +1,6 @@
-import _ from 'lodash';
+import _, { set } from 'lodash';
 import { ADMINISTRATOR, ALL_PERMISSIONS, ALL_ROLES, ROLES_AND_PERMISSIONS } from '@/constants';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from '@inertiajs/react';
 import Checkbox from '@/Components/Checkbox';
 import Switch from '@/Components/Switch';
@@ -11,6 +11,9 @@ import TextInput from '@/Components/TextInput';
 
 const Form = props => {
   const activeRadiobox = useRef();
+  const refCheckbox = useRef([]);
+  const [check, setCheck] = useState(['can_access_index_users']);
+  const [permissions, setPermissions] = useState([]);
 
   const { data, setData, post, put, processing, errors } = useForm({
     id: props.data.id,
@@ -24,25 +27,11 @@ const Form = props => {
     is_active: props.data.is_active,
   });
 
-  // useEffect(() => {
-  //   if (data.is_edit) {
-  //     data.roles.forEach(role => {
-  //       setData('roles', role);
-  //       handleCheckRole(true, role);
-  //       Object.values(rolesCheckboxes).find(checkbox => checkbox && checkbox.dataset.value === role).checked = true;
-  //     });
-
-  //     data.permissions.forEach(permission => {
-  //       setData('permissions', permission);
-  //       handleCheckPermission(true, permission);
-  //       Object.values(permissionCheckboxes).find(
-  //         checkbox => checkbox && checkbox.dataset.value === permission
-  //       ).checked = true;
-  //     });
-
-  //     activeRadiobox.current.checked = data.is_active;
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (data.is_edit) {
+      setPermissions(data.permissions);
+    }
+  }, []);
 
   function submit(event) {
     event.preventDefault();
@@ -79,16 +68,32 @@ const Form = props => {
   //   }
   // }
 
-  useEffect(() => {
-    console.log(data.permissions);
-  }, [data.permissions]);
+  // useEffect(() => {
+  //   console.log(data.permissions);
+  // }, [data.permissions]);
 
-  function handleCheckbox(type, key, checked) {
-    if (checked === true) {
-      // setData('permissions');
+  // function handleCheckbox(type, key) {
+  //   if (type === 'permission') {
+  //     setData('permissions', permission => {
+  //       if (!permission.includes(key)) {
+  //         return [...permission, key];
+  //       } else {
+  //         return permission.filter(item => item !== key);
+  //       }
+  //     });
+  //   }
+  // }
+
+  function handleCheckbox(type, key) {
+    if (type === 'permission') {
+      setPermissions(permission => {
+        if (!permission.includes(key)) {
+          return [...permission, key];
+        } else {
+          return permission.filter(item => item !== key);
+        }
+      });
     }
-    // console.log('target', data.permissions);
-    // console.log(type, key, checked);
   }
 
   return (
@@ -152,7 +157,10 @@ const Form = props => {
               <input
                 id={`permission-${index}`}
                 type="checkbox"
-                onChange={event => handleCheckbox('permission', permission, event.target.checked)}
+                data-value={`${permission}`}
+                ref={element => (refCheckbox[index] = element)}
+                onChange={() => handleCheckbox('permission', permission)}
+                checked={check['can_access_index_users'] === permission}
               />
               <InputLabel htmlFor={`permission-${index}`}>{permission}</InputLabel>
             </div>
@@ -171,7 +179,7 @@ const Form = props => {
             </div>
           ))}
         </div>
-        <div>{JSON.stringify(data)}</div>
+        <div>{JSON.stringify(permissions)}</div>
         <div className="grid space-y-4">
           <h1>Active</h1>
           <Switch ref={activeRadiobox} onChange={event => setData('is_active', event.target.checked)} />
