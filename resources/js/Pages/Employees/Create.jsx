@@ -7,7 +7,7 @@ import MainLayout from '@/Layouts/MainLayout';
 export default function Create(props) {
   const [form, setForm] = useState({
     id: '',
-    employee_number: '',
+    id_number: '',
     first_name: '',
     middle_name: '',
     last_name: '',

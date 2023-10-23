@@ -7,20 +7,14 @@ namespace App\Constants;
 class Constants
 {
  public const MALE = 'MALE';
-
  public const FEMALE = 'FEMALE';
-
  public const REGULAR = 'REGULAR';
-
  public const PROBITIONARY = 'PROBITIONARY';
-
  public const SINGLE = 'SINGLE';
-
  public const WIDOWED = 'WIDOWED';
-
  public const MARRIED = 'MARRIED';
 
- public const SEX = [
+ public const GENDER = [
      self::MALE,
      self::FEMALE,
  ];

@@ -29,8 +29,8 @@ export default function Index(props) {
 
   const columns = [
     {
-      column: 'employee_number',
-      name: 'Employee #',
+      column: 'id_number',
+      name: 'ID #',
     },
     {
       column: 'first_name',
@@ -47,6 +47,10 @@ export default function Index(props) {
     {
       column: 'birth_date',
       name: 'Birth date',
+    },
+    {
+      column: 'address',
+      name: 'Address',
     },
     {
       column: 'hired_date',

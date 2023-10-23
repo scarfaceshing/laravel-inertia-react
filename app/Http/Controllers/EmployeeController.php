@@ -21,7 +21,7 @@ class EmployeeController extends Controller
         $order_by = $request->query('orderBy');
         $limit = $request->query('limit');
 
-        $employees = Employee::where('employee_number', 'LIKE', "%{$search}%")
+        $employees = Employee::where('id_number', 'LIKE', "%{$search}%")
             ->orWhere('employees.first_name', 'LIKE', "%{$search}%")
             ->orWhere('employees.middle_name', 'LIKE', "%{$search}%")
             ->orWhere('employees.last_name', 'LIKE', "%{$search}%")

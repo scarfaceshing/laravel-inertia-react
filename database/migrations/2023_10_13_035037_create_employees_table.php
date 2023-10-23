@@ -9,7 +9,7 @@ return new class extends Migration
 {
   private const COLUMNS = [
       [
-          'column_name' => 'employee_number',
+          'column_name' => 'id_number',
           'data_type' => 'string',
           'default' => 'nullable',
       ],
@@ -34,6 +34,11 @@ return new class extends Migration
           'default' => 'nullable',
       ],
       [
+        'column_name' => 'address',
+        'data_type' => 'string',
+        'default' => 'nullable',
+      ],
+      [
           'column_name' => 'hired_date',
           'data_type' => 'date',
           'default' => 'nullable',
@@ -55,9 +60,9 @@ return new class extends Migration
           'default' => 'nullable',
       ],
       [
-          'column_name' => 'sex',
+          'column_name' => 'gender',
           'data_type' => 'enum',
-          'value' => Constants::SEX,
+          'value' => Constants::GENDER,
           'default' => 'male',
       ],
       [

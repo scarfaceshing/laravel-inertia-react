@@ -12,8 +12,8 @@ import TextInput from '@/Components/TextInput';
 const Form = props => {
   const activeRadiobox = useRef();
   const refCheckbox = useRef([]);
-  const [check, setCheck] = useState(['can_access_index_users']);
-  const [permissions, setPermissions] = useState([]);
+  const [permissions, setPermissions] = useState({});
+  const [roles, setRoles] = useState({});
 
   const { data, setData, post, put, processing, errors } = useForm({
     id: props.data.id,
@@ -29,12 +29,43 @@ const Form = props => {
 
   useEffect(() => {
     if (data.is_edit) {
-      setPermissions(data.permissions);
+      let collectionPermissions = {};
+      let collectionRoles = {};
+
+      data.permissions.forEach((item, index) => {
+        collectionPermissions[item] = true;
+      });
+
+      data.roles.forEach((item, index) => {
+        collectionRoles[item] = true;
+      });
+
+      setPermissions({
+        ...permissions,
+        ...collectionPermissions,
+      });
+
+      setRoles({
+        ...roles,
+        ...collectionRoles,
+      });
     }
   }, []);
 
   function submit(event) {
     event.preventDefault();
+
+    data.roles = Object.keys(roles).map(key => {
+      if (roles[key] === true) {
+        return key;
+      }
+    });
+
+    data.permissions = Object.keys(permissions).map(key => {
+      if (permissions[key] === true) {
+        return key;
+      }
+    });
 
     if (props.data.is_edit === true) {
       put(route('users.update', props.data.id));
@@ -43,55 +74,32 @@ const Form = props => {
     }
   }
 
-  // function handleCheckPermission(checked, value) {
-  //   if (checked === true) {
-  //     setData('permissions', [...data.permissions, value]);
-  //   } else if (checked === false) {
-  //     let permissions = data.permissions.filter(permission => permission !== value);
-  //     setData('permissions', permissions);
-  //   }
-  // }
-
-  // function handleCheckRole(checked, value) {
-  //   let { permissions } = ROLES_AND_PERMISSIONS.find(item => item.name === value);
-  //   Object.values(permissionCheckboxes).forEach(element => {
-  //     if (element !== null && permissions.includes(element.dataset.value)) {
-  //       element.checked = checked;
-  //     }
-  //   });
-
-  //   if (checked === true) {
-  //     setData('roles', [...data.roles, value]);
-  //   } else if (checked === false) {
-  //     let roles = data.roles.filter(role => role !== value);
-  //     setData('roles', roles);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   console.log(data.permissions);
-  // }, [data.permissions]);
-
-  // function handleCheckbox(type, key) {
-  //   if (type === 'permission') {
-  //     setData('permissions', permission => {
-  //       if (!permission.includes(key)) {
-  //         return [...permission, key];
-  //       } else {
-  //         return permission.filter(item => item !== key);
-  //       }
-  //     });
-  //   }
-  // }
-
-  function handleCheckbox(type, key) {
+  function handleCheckbox(event, type) {
+    let checked = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     if (type === 'permission') {
-      setPermissions(permission => {
-        if (!permission.includes(key)) {
-          return [...permission, key];
-        } else {
-          return permission.filter(item => item !== key);
-        }
+      let permissionName = event.target.name;
+
+      setPermissions({
+        ...permissions,
+        [permissionName]: checked,
+      });
+    } else if (type === 'role') {
+      let roleName = event.target.name;
+      let permissionsOfRole = ROLES_AND_PERMISSIONS.filter(role => role.name === roleName);
+      let collectionPermissions = {};
+
+      permissionsOfRole[0].permissions.forEach((item, index) => {
+        collectionPermissions[item] = checked;
+      });
+
+      setPermissions({
+        ...permissions,
+        ...collectionPermissions,
+      });
+
+      setRoles({
+        ...roles,
+        [event.target.name]: checked,
       });
     }
   }
@@ -153,14 +161,12 @@ const Form = props => {
         <h1>Permissions</h1>
         <div className="flex flex-wrap gap-y-2">
           {ALL_PERMISSIONS.map((permission, index) => (
-            <div key={index} className="basis-1/3 flex items-center gap-x-2">
-              <input
-                id={`permission-${index}`}
+            <div key={index} className="basis-1/2 flex items-center gap-x-2">
+              <Checkbox
+                name={`${permission}`}
                 type="checkbox"
-                data-value={`${permission}`}
-                ref={element => (refCheckbox[index] = element)}
-                onChange={() => handleCheckbox('permission', permission)}
-                checked={check['can_access_index_users'] === permission}
+                checked={permissions[permission] === true}
+                onChange={event => handleCheckbox(event, 'permission')}
               />
               <InputLabel htmlFor={`permission-${index}`}>{permission}</InputLabel>
             </div>
@@ -170,16 +176,16 @@ const Form = props => {
         <div className="flex flex-wrap gap-y-2">
           {ALL_ROLES.map((role, index) => (
             <div key={index} className="basis-1/3 flex items-center gap-x-2">
-              <input
-                id={`roles-${index}`}
+              <Checkbox
                 type="checkbox"
-                onChange={event => handleCheckbox('role', role, event.target.checked)}
+                name={`${role}`}
+                checked={roles[role] === true}
+                onChange={event => handleCheckbox(event, 'role')}
               />
               <InputLabel htmlFor={`roles-${index}`}>{role}</InputLabel>
             </div>
           ))}
         </div>
-        <div>{JSON.stringify(permissions)}</div>
         <div className="grid space-y-4">
           <h1>Active</h1>
           <Switch ref={activeRadiobox} onChange={event => setData('is_active', event.target.checked)} />
@@ -193,21 +199,3 @@ const Form = props => {
 };
 
 export default Form;
-
-{
-  /* <div className="flex flex-wrap gap-y-2">
-{ALL_PERMISSIONS.map((permission, index) => (
-  <div key={index} className="basis-1/3 flex items-center gap-x-2">
-    <h1>{permission}</h1>
-  </div>
-))}
-</div>
-<h1>Roles</h1>
-<div className="flex flex-wrap gap-y-2">
-{ALL_ROLES.map((role, index) => (
-  <div key={index} className="basis-1/3 flex items-center gap-x-2">
-    <h1>{role}</h1>
-  </div>
-))}
-</div> */
-}

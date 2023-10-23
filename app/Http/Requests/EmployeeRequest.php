@@ -25,11 +25,11 @@ class EmployeeRequest extends FormRequest
     public function rules()
     {
         $reqularization = implode(',', Constants::REGULARIZATION);
-        $sex = implode(',', Constants::SEX);
+        $sex = implode(',', Constants::GENDER);
         $civil_status = implode(',', Constants::CIVIL_STATUS);
 
         return [
-            'employee_number' => ['required', 'min:5', 'max:50', 'unique:employees,employee_number,'.$this->id.',id'],
+            'id_number' => ['required', 'min:5', 'max:50', 'unique:employees,id_number,'.$this->id.',id'],
             'first_name' => ['required', 'max:150'],
             'middle_name' => ['max:150'],
             'last_name' => ['required'],
