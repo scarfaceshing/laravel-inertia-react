@@ -7,7 +7,7 @@ export const CAN_ACCESS_INDEX_DASHBOARD = 'can_access_index_dashboard';
  export const CAN_ACCESS_EDIT_USERS = 'can_access_edit_users';
  export const CAN_CHANGE_USERS = 'can_change_role_users';
  export const CAN_CHANGE_PERMISSIONS_USERS = 'can_change_permission_users';
- export const CAN_STORE_USER = 'can_store_user';
+ export const CAN_STORE_USERS = 'CAN_STORE_USERS';
  export const CAN_UPDATE_USER = 'can_update_user';
  export const CAN_DELETE_USERS = 'can_delete_users';
 
@@ -31,7 +31,7 @@ export const CAN_ACCESS_INDEX_DASHBOARD = 'can_access_index_dashboard';
   CAN_CHANGE_PERMISSIONS_USERS,
   CAN_CHANGE_USERS,
   CAN_DELETE_USERS,
-  CAN_STORE_USER,
+  CAN_STORE_USERS,
   CAN_UPDATE_USER
  ];
 

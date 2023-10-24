@@ -29,7 +29,7 @@ class TestController extends Controller
  public function trigger()
  {
     ImportEmployeesEvent::dispatch('test');
-    
+
     return Redirect::route('test.index');
  }
 }

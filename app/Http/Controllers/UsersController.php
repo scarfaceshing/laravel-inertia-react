@@ -14,7 +14,7 @@ use Inertia\Inertia;
 
 class UsersController extends Controller
 {
-    public const USERS_API_URL = '/users';
+    public const URL = '/users';
 
     public function index(Request $request)
     {
@@ -25,8 +25,7 @@ class UsersController extends Controller
         $sort_by = $request->query('sortBy');
         $order_by = $request->query('orderBy');
 
-        $data = User
-            ::select('users.id', 'users.username', 'users.email') // Specify the columns you want
+        $data = User::select('users.id', 'users.username', 'users.email') // Specify the columns you want
             ->where(function ($query) use ($search) {
                 $query->where('username', 'LIKE', "%$search%")
                     ->orWhere('email', 'LIKE', "%$search%");
@@ -43,28 +42,40 @@ class UsersController extends Controller
 
     public function create()
     {
-        ACL::allowOnly([Permission::CAN_ACCESS_CREATE_USERS, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
+        ACL::allowOnly([
+            Permission::CAN_ACCESS_CREATE_USERS,
+            Permission::CAN_CHANGE_PERMISSIONS_USERS,
+            Permission::CAN_CHANGE_ROLE_USERS
+        ]);
 
         return Inertia::render('Users/Create');
     }
 
     public function store(UserRequest $request)
     {
-        ACL::allowOnly([Permission::CAN_STORE_USER, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
+        ACL::allowOnly([
+            Permission::CAN_STORE_USERS,
+            Permission::CAN_CHANGE_PERMISSIONS_USERS,
+            Permission::CAN_CHANGE_ROLE_USERS
+        ]);
 
-        $data = $request->only('username', 'email', 'password', 'is_active', 'permissions', 'roles');
+        $data = $request->only('username', 'email', 'password', 'is_active', 'permissions', 'roles', 'is_active');
         $data['password'] = Hash::make($data['password']);
 
         $user = User::create($data);
-        $user->givePermissionTo(array_unique($data['permissions']));
-        $user->assignRole(array_unique($data['roles']));
+        $user->givePermissionTo($data['permissions']);
+        $user->assignRole($data['roles']);
 
         return to_route('users.index');
     }
 
     public function edit(User $user)
     {
-        ACL::allowOnly([Permission::CAN_ACCESS_EDIT_USERS, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
+        ACL::allowOnly([
+            Permission::CAN_ACCESS_EDIT_USERS,
+            Permission::CAN_CHANGE_PERMISSIONS_USERS,
+            Permission::CAN_CHANGE_ROLE_USERS
+        ]);
 
         return Inertia::render('Users/Edit', [
             'users' => $user->only('username', 'email', 'is_active'),
@@ -75,17 +86,21 @@ class UsersController extends Controller
 
     public function update(User $user, UserRequest $request)
     {
-        ACL::allowOnly([Permission::CAN_UPDATE_USER, Permission::CAN_CHANGE_PERMISSIONS_USERS, Permission::CAN_CHANGE_ROLE_USERS]);
+        ACL::allowOnly([
+            Permission::CAN_UPDATE_USERS,
+            Permission::CAN_CHANGE_PERMISSIONS_USERS,
+            Permission::CAN_CHANGE_ROLE_USERS
+        ]);
 
         if ($request->password) {
-            $user->update($request->only('username', 'email', 'password'));
+            $user->update($request->only('username', 'email', 'password', 'is_active'));
         } else {
-            $user->update($request->only('username', 'email'));
+            $user->update($request->only('username', 'email', 'is_active'));
         }
 
         // TODO: array_unique should be in front end
-        $user->syncPermissions(array_unique($request->permissions));
-        $user->syncRoles(array_unique($request->roles));
+        $user->syncPermissions($request->permissions);
+        $user->syncRoles($request->roles);
 
         return to_route('users.index');
     }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Constants\Constants;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Employee>
@@ -24,6 +25,7 @@ class EmployeeFactory extends Factory
 
         return [
             'id_number' => $id_number,
+            'user_id' => User::factory(),
             'first_name' => $this->faker->firstName(),
             'middle_name' => $this->faker->lastName(),
             'last_name' => $this->faker->lastName(),
@@ -36,7 +38,7 @@ class EmployeeFactory extends Factory
             'gender' => $this->faker->randomElement(Constants::GENDER),
             'civil_status' => $this->faker->randomElement(Constants::CIVIL_STATUS),
             'deleted_at' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
-            'is_active' => $this->faker->randomElement([true, false]),
+            'employee_status' => $this->faker->randomElement([true, false]),
         ];
     }
 }

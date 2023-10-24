@@ -5,8 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
   private const COLUMNS = [
       [
           'column_name' => 'id_number',
@@ -72,7 +71,7 @@ return new class extends Migration
           'default' => 'single',
       ],
       [
-          'column_name' => 'is_active',
+          'column_name' => 'employee_status',
           'data_type' => 'boolean',
           'default' => false,
       ],
@@ -87,6 +86,8 @@ return new class extends Migration
   {
     Schema::create('employees', function (Blueprint $table) {
       $table->id();
+      $table->unsignedBigInteger('user_id');
+      $table->foreign('user_id')->references('id')->on('users');
       foreach (self::COLUMNS as $column) {
         $this->createColumn($table, $column);
       }
@@ -102,6 +103,10 @@ return new class extends Migration
    */
   public function down()
   {
+    Schema::table('employees', function (Blueprint $table) {
+      $table->dropForeign(['user_id']);
+    });
+
     Schema::dropIfExists('employees');
   }
 

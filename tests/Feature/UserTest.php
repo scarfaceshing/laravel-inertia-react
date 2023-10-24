@@ -41,7 +41,7 @@ class UserTest extends TestCase
  public function test_users_permission_ok(): void
  {
   $response = $this->actingAs($this->allowed_request_user)
-   ->json(Request::METHOD_GET, UsersController::USERS_API_URL);
+   ->json(Request::METHOD_GET, UsersController::URL);
 
   $response->assertStatus(Response::HTTP_OK);
  }
@@ -49,7 +49,7 @@ class UserTest extends TestCase
  public function test_users_permission_fail(): void
  {
   $response = $this->actingAs($this->invalid_request_user)
-   ->json(Request::METHOD_GET, UsersController::USERS_API_URL);
+   ->json(Request::METHOD_GET, UsersController::URL);
 
   $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
  }
@@ -64,10 +64,19 @@ class UserTest extends TestCase
       'password' => $password,
       'password_confirmation' => $password,
       'permissions' => Permission::ALL_PERMISSIONS,
+      'roles' => $this->faker->randomElement(Role::ALL_ROLES),
+      'is_active' => true
   ];
 
   $response = $this->actingAs($this->allowed_request_user)
-   ->json(Request::METHOD_POST, UsersController::USERS_API_URL, $param);
+   ->json(Request::METHOD_POST, UsersController::URL, $param);
+
+   $this->assertDatabaseHas('users', [
+    'username' => $param['username'],
+    'email' => $param['email'],
+    'is_active' => 1,
+   ]);
+
 
   $response->assertStatus(Response::HTTP_FOUND);
  }
@@ -89,9 +98,9 @@ class UserTest extends TestCase
 
   $response = $this->actingAs($this->allowed_request_user)
    ->json(
-    Request::METHOD_PUT,
-    UsersController::USERS_API_URL.'/'.$dummy_user->id,
-    $param
+       Request::METHOD_PUT,
+       UsersController::URL.'/'.$dummy_user->id,
+       $param
    );
 
   $response
@@ -102,7 +111,7 @@ class UserTest extends TestCase
       'id' => $dummy_user->id,
       'username' => $param['username'],
       'email' => $param['email'],
-      'is_active' => false,
+      'is_active' => 0,
   ]);
 
   $dummy_user_permissions = User::findOrFail($dummy_user->id)->permissions;
@@ -127,9 +136,9 @@ class UserTest extends TestCase
 
   $response = $this->actingAs($this->allowed_request_user)
    ->json(
-    Request::METHOD_PUT,
-    UsersController::USERS_API_URL.'/'.$dummy_user->id,
-    $param
+       Request::METHOD_PUT,
+       UsersController::URL.'/'.$dummy_user->id,
+       $param
    );
 
   $response
@@ -155,8 +164,8 @@ class UserTest extends TestCase
 
   $response = $this->actingAs($this->allowed_request_user)
    ->json(
-    Request::METHOD_DELETE,
-    UsersController::USERS_API_URL.'/'.$dummy_user->id,
+       Request::METHOD_DELETE,
+       UsersController::URL.'/'.$dummy_user->id,
    );
 
   $response->assertStatus(Response::HTTP_OK);

@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
  private const USERS_DESCRIPTION = [
      [
          'name' => Permission::CAN_ACCESS_INDEX_USERS,
@@ -22,11 +21,11 @@ return new class extends Migration
          'description' => 'Can access edit users',
      ],
      [
-         'name' => Permission::CAN_STORE_USER,
+         'name' => Permission::CAN_STORE_USERS,
          'description' => 'Can access store users',
      ],
      [
-         'name' => Permission::CAN_UPDATE_USER,
+         'name' => Permission::CAN_UPDATE_USERS,
          'description' => 'Can access update users',
      ],
      [
@@ -76,7 +75,7 @@ return new class extends Migration
   ]);
 
   collect(
-   [
+      [
        ...self::USERS_DESCRIPTION,
        ...self::DASHBOARD_DESCRIPTION,
        ...self::ROLES_DESCRIPTION,

@@ -14,7 +14,7 @@ class EmployeeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,20 +25,20 @@ class EmployeeRequest extends FormRequest
     public function rules()
     {
         $reqularization = implode(',', Constants::REGULARIZATION);
-        $sex = implode(',', Constants::GENDER);
+        $gender = implode(',', Constants::GENDER);
         $civil_status = implode(',', Constants::CIVIL_STATUS);
 
         return [
-            'id_number' => ['required', 'min:5', 'max:50', 'unique:employees,id_number,'.$this->id.',id'],
             'first_name' => ['required', 'max:150'],
             'middle_name' => ['max:150'],
             'last_name' => ['required'],
             'birth_date' => ['required', 'date'],
-            'hired_date' => ['required', 'date|after:start_date'],
+            'address' => ['required', 'max:255'],
+            'hired_date' => ['required', 'date', 'after:start_date'],
             'regularization' => ['required', 'in:'.$reqularization],
-            'sex' => ['required', 'in:'.$sex],
+            'gender' => ['required', 'in:'.$gender],
             'civil_status' => ['required', 'in:'.$civil_status],
-            'is_active' => ['required', 'boolean'],
+            'phone_number.*.*' => ['required|numeric|digits:10'],
         ];
     }
 }
