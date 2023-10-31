@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint --fix .",
-    "pint": ".\\vendor\\bin\\pint --preset psr12",
+    "pint": "./vendor/bin/pint --preset psr12",
     "format": "prettier 'resources/{js,jsx}/**/*.{js,jsx}' --write && npm run pint",
     "pre-commit": "npm run format && lint-staged && pretty-quick --staged && npm run pint",
     "docker-up": "./laradock.sh up",

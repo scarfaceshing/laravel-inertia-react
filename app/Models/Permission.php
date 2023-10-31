@@ -11,7 +11,7 @@ class Permission extends SpatiePermission
  public const CAN_ACCESS_INDEX_USERS = 'can_access_index_users';
  public const CAN_ACCESS_CREATE_USERS = 'can_access_create_users';
  public const CAN_ACCESS_EDIT_USERS = 'can_access_edit_users';
- public const CAN_STORE_USERS = 'CAN_STORE_USERS';
+ public const CAN_STORE_USERS = 'can_store_users';
  public const CAN_UPDATE_USERS = 'can_update_user';
  public const CAN_DELETE_USERS = 'can_delete_users';
  public const CAN_CHANGE_ROLE_USERS = 'can_change_role_users';
