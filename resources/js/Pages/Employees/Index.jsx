@@ -1,19 +1,16 @@
-import { Close } from '@/icons';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import BreadCrump from '@/Components/BreadCrump';
 import DynamicTable, { TableHeader } from '@/Components/DynamicTable';
 import InputLabel from '@/Components/InputLabel';
 import MainLayout from '@/Layouts/MainLayout';
-import Modal from '@/Components/Modal';
 import PrimaryButton from '@/Components/PrimaryButton';
-import SecondaryButton from '@/Components/SecondaryButton';
 import Select from '@/Components/Select';
 import TextInput from '@/Components/TextInput';
 
 export default function Index(props) {
-  const [showModal, setShowModal] = useState(false);
-  const lengthMenu = [5, 50, 100];
+  const [showEmployee, setShowEmployee] = useState(false);
+  const lengthMenu = [10, 50, 100];
 
   const { data, setData, post, put, processing, errors, get } = useForm({
     search: null,
@@ -24,7 +21,7 @@ export default function Index(props) {
   });
 
   useEffect(() => {
-    setData({ ...data, search: '', limit: 5, sortBy: 'created_at', orderBy: 'ASC', page: 1 });
+    setData({ ...data, search: '', limit: 10, sortBy: 'created_at', orderBy: 'ASC', page: 1 });
   }, []);
 
   const columns = [
@@ -45,22 +42,6 @@ export default function Index(props) {
       name: 'Last name',
     },
     {
-      column: 'birth_date',
-      name: 'Birth date',
-    },
-    {
-      column: 'address',
-      name: 'Address',
-    },
-    {
-      column: 'hired_date',
-      name: 'Hired date',
-    },
-    {
-      column: 'regularization',
-      name: 'Regularization',
-    },
-    {
       column: 'department',
       name: 'Department',
     },
@@ -69,12 +50,18 @@ export default function Index(props) {
       name: 'Position',
     },
     {
-      column: 'sex',
-      name: 'Gender',
+      column: 'employee_status',
+      name: 'Status',
     },
     {
-      column: 'civil_status',
-      name: 'Civil status',
+      name: 'Actions',
+      mutate: (value, data) => (
+        <div className="grid grid-flow-col auto-cols-max md:auto-cols-min gap-x-2">
+          <Link href={route('employees.show', data.id)}>View</Link>
+          <span>Edit</span>
+          <span>Delete</span>
+        </div>
+      ),
     },
   ];
 
@@ -141,21 +128,6 @@ export default function Index(props) {
           </div>
         </div>
       </div>
-      <Modal show={showModal}>
-        <div className="flex justify-end">
-          <div className="p-2" onClick={() => setShowModal(false)}>
-            <Close />
-          </div>
-        </div>
-        <div className="h-64 flex flex-col sm:justify-center items-center gap-2">
-          <h1>Are you sure to delete?</h1>
-          <div className="text-center mb-2"></div>
-          <div className="flex gap-x-3">
-            <PrimaryButton className="px-7">Yes</PrimaryButton>
-            <SecondaryButton onClick={() => setShowModal(false)}>Cancel</SecondaryButton>
-          </div>
-        </div>
-      </Modal>
     </MainLayout>
   );
 }

@@ -30,7 +30,7 @@ class EmployeeController extends Controller
         $search = $request->query('search');
         $sort_by = $request->query('sortBy');
         $order_by = $request->query('orderBy');
-        $limit = $request->query('limit');
+        $limit = $request->query('limit', 10);
 
         $employees = Employee::where('id_number', 'LIKE', "%{$search}%")
             ->orWhere('employees.first_name', 'LIKE', "%{$search}%")
@@ -120,7 +120,9 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        //
+        return Inertia::render('Employees/Show', [
+            'data' => $employee
+        ]);
     }
 
     /**

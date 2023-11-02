@@ -32,13 +32,12 @@ class EmployeeFactory extends Factory
             'birth_date' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
             'address' => $this->faker->address(),
             'hired_date' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
-            'regularization' => $this->faker->randomElement(Constants::REGULARIZATION),
+            'employee_status' => $this->faker->randomElement(Constants::EMPLOYEE_STATUS),
             'department' => null,
             'position' => null,
             'gender' => $this->faker->randomElement(Constants::GENDER),
             'civil_status' => $this->faker->randomElement(Constants::CIVIL_STATUS),
             'deleted_at' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
-            'employee_status' => $this->faker->randomElement([true, false]),
         ];
     }
 }

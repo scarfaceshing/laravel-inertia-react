@@ -13,15 +13,19 @@ class Constants
  public const SINGLE = 'SINGLE';
  public const WIDOWED = 'WIDOWED';
  public const MARRIED = 'MARRIED';
+ public const TERMINATE = 'TERMINATE';
+ public const RESIGNED = 'RESIGNED';
 
  public const GENDER = [
      self::MALE,
      self::FEMALE,
  ];
 
- public const REGULARIZATION = [
+ public const EMPLOYEE_STATUS = [
      self::REGULAR,
      self::PROBITIONARY,
+     self::TERMINATE,
+     self::RESIGNED
  ];
 
  public const CIVIL_STATUS = [

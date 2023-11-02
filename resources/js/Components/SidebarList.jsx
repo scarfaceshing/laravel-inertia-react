@@ -1,16 +1,33 @@
-import { Person, CarretDown, CaretRight } from '@/icons';
-import { Link as InertiaLink } from '@inertiajs/react';
-import { useState, createContext, useContext, useEffect, useRef } from 'react';
+import { CaretRight, CarretDown, Person } from '@/icons';
+import { Link as InertiaLink, Link } from '@inertiajs/react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { Menu } from '@/icons';
+
+const SidebarContext = createContext();
 
 export function SidebarList({ children }) {
-  return <ul className="space-y-2 font-medium">{children}</ul>;
+  const [collapse, setCollapse] = useState(false);
+
+  return (
+    <SidebarContext.Provider value={{ collapse: collapse }}>
+      <ul className="space-y-2 font-medium">
+        <div className="flex justify-between border-b-2 pb-2">
+          <h1 className="text-2xl">Bredco</h1>
+          <button type="button" className="hover:bg-white hover:text-gray-900 p-1 hover:p-1 rounded-lg">
+            <Menu className="w-8 h-8" />
+          </button>
+        </div>
+        {children}
+      </ul>
+    </SidebarContext.Provider>
+  );
 }
 
 const List = ({ to, children }) => {
   return (
     <InertiaLink
       href={to}
-      className="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 group"
+      className="flex items-center p-2 rounded-lg group text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800"
     >
       {children}
     </InertiaLink>
@@ -19,14 +36,13 @@ const List = ({ to, children }) => {
 
 const HeaderList = ({ children }) => {
   return (
-    <button
+    <Link
       onClick={() => console.log('collapse')}
-      type="button"
-      className="flex items-center w-full p-2 text-base text-gray-100 transition duration-75 rounded-lg group hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 group"
+      className="flex items-center p-2 group text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 rounded-lg"
     >
       {children}
-      <CarretDown />
-    </button>
+      <CarretDown className="pl-5" />
+    </Link>
   );
 };
 
@@ -47,7 +63,7 @@ export const DropdownLink = ({ to, children }) => {
     <li>
       <InertiaLink
         href={to}
-        className="flex items-center w-full p-2 text-gray-100 transition duration-75 rounded-lg pl-10 group hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800"
+        className="flex items-center w-full p-2 transition duration-75 rounded-lg pl-10 group text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800"
       >
         {children}
       </InertiaLink>

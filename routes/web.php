@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware('auth')->group(function () {
  Route::resource('/users', UsersController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
- Route::resource('/employees', EmployeeController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+ Route::resource('/employees', EmployeeController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
 
  Route::get('/roles', [RolesController::class, 'index'])->name('roles.index');
  Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');

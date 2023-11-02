@@ -1,6 +1,5 @@
 <?php
 
-use App\Constants\Constants;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -33,20 +32,14 @@ return new class extends Migration {
           'default' => 'nullable',
       ],
       [
-        'column_name' => 'address',
-        'data_type' => 'string',
-        'default' => 'nullable',
+          'column_name' => 'address',
+          'data_type' => 'string',
+          'default' => 'nullable',
       ],
       [
           'column_name' => 'hired_date',
           'data_type' => 'date',
           'default' => 'nullable',
-      ],
-      [
-          'column_name' => 'regularization',
-          'data_type' => 'enum',
-          'value' => Constants::REGULARIZATION,
-          'default' => 'probitionary',
       ],
       [
           'column_name' => 'department',
@@ -60,20 +53,18 @@ return new class extends Migration {
       ],
       [
           'column_name' => 'gender',
-          'data_type' => 'enum',
-          'value' => Constants::GENDER,
-          'default' => 'male',
+          'data_type' => 'string',
+          'default' => 'nullable',
       ],
       [
           'column_name' => 'civil_status',
-          'data_type' => 'enum',
-          'value' => Constants::CIVIL_STATUS,
-          'default' => 'single',
+          'data_type' => 'string',
+          'default' => 'nullable',
       ],
       [
           'column_name' => 'employee_status',
-          'data_type' => 'boolean',
-          'default' => false,
+          'data_type' => 'string',
+          'default' => 'nullable',
       ],
   ];
 

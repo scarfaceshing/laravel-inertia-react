@@ -7,6 +7,7 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import _ from 'lodash';
+import { Spinner } from '@/icons';
 
 window.Echo.channel('my-channel').listen('.my-event', e => console.log(e));
 
@@ -91,7 +92,11 @@ export default function Login({ status, canResetPassword }) {
           )}
 
           <PrimaryButton className="ml-4" disabled={processing}>
-            Log in
+            {processing ? (
+              <Spinner className="w-8 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" />
+            ) : (
+              <span>Log in</span>
+            )}
           </PrimaryButton>
         </div>
       </form>
