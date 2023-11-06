@@ -10,6 +10,7 @@ use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -108,7 +109,6 @@ class EmployeeController extends Controller
                 'is_active' => true
             ])
         );
-
 
         return redirect()->route('employees.index')->with('message', 'Added Successfully');
     }

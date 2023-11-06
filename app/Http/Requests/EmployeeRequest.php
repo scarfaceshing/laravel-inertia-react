@@ -24,7 +24,7 @@ class EmployeeRequest extends FormRequest
      */
     public function rules()
     {
-        $reqularization = implode(',', Constants::REGULARIZATION);
+        $employee_status = implode(',', Constants::EMPLOYEE_STATUS);
         $gender = implode(',', Constants::GENDER);
         $civil_status = implode(',', Constants::CIVIL_STATUS);
 
@@ -35,7 +35,7 @@ class EmployeeRequest extends FormRequest
             'birth_date' => ['required', 'date'],
             'address' => ['required', 'max:255'],
             'hired_date' => ['required', 'date', 'after:start_date'],
-            'regularization' => ['required', 'in:'.$reqularization],
+            'employee_status' => ['required', 'in:'.$employee_status],
             'gender' => ['required', 'in:'.$gender],
             'civil_status' => ['required', 'in:'.$civil_status],
             'phone_number.*.*' => ['required|numeric|digits:10'],

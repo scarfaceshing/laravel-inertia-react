@@ -15,6 +15,7 @@ class Constants
  public const MARRIED = 'MARRIED';
  public const TERMINATE = 'TERMINATE';
  public const RESIGNED = 'RESIGNED';
+ public const RETAINED = 'RETAINED';
 
  public const GENDER = [
      self::MALE,
@@ -25,7 +26,8 @@ class Constants
      self::REGULAR,
      self::PROBITIONARY,
      self::TERMINATE,
-     self::RESIGNED
+     self::RESIGNED,
+     self::RETAINED
  ];
 
  public const CIVIL_STATUS = [
