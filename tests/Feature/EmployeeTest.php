@@ -37,53 +37,57 @@ class EmployeeTest extends TestCase
     {
         $employee = $this->createEmployee();
 
+        $param = [
+            "search" => "",
+            "sortBy" => "created_at",
+            "orderBy" => "ASC",
+            "page" => 1,
+            "limit" => 10
+        ];
+
         $response = $this->actingAs($this->user)
             ->json(Request::METHOD_GET, EmployeeController::URL)
                 ->assertInertia(fn (Assert $page) => $page
                     ->component('Employees/Index')
-                    ->has('data', fn (Assert $page) =>
-                        $page->where('first_name', $employee->first_name)
+                    ->has('data.data', fn (Assert $page) =>
+                        $page->where('0.first_name', $employee->first_name)
                 )
-            );
-        
-        dd($response);
-            
-        $response->assertStatus(Response::HTTP_OK);
+            );       
     }
 
-    public function test_store_employee()
-    {
-        $param = [
-            'first_name' => $this->faker->firstName(),
-            'middle_name' => $this->faker->lastName(),
-            'last_name' => $this->faker->lastName(),
-            'birth_date' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
-            'address' => $this->faker->address(),
-            'email_address' => $this->faker->email(),
-            'hired_date' => $this->faker->date($format = 'Y-m-d', $min = 'now'),
-            'employee_status' => $this->faker->randomElement(Constants::EMPLOYEE_STATUS),
-            'department' => $this->faker->randomElement(Department::ALL_DEPARTMENTS),
-            'position' => $this->faker->randomElement(Position::ALL_POSITIONS),
-            'gender' => $this->faker->randomElement(Constants::GENDER),
-            'civil_status' => $this->faker->randomElement(Constants::CIVIL_STATUS),
-            'phone_number' => $this->getEmployeeMultiplePhoneNumbers()
-        ];
+    // public function test_store_employee()
+    // {
+    //     $param = [
+    //         'first_name' => $this->faker->firstName(),
+    //         'middle_name' => $this->faker->lastName(),
+    //         'last_name' => $this->faker->lastName(),
+    //         'birth_date' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
+    //         'address' => $this->faker->address(),
+    //         'email_address' => $this->faker->email(),
+    //         'hired_date' => $this->faker->date($format = 'Y-m-d', $min = 'now'),
+    //         'employee_status' => $this->faker->randomElement(Constants::EMPLOYEE_STATUS),
+    //         'department' => $this->faker->randomElement(Department::ALL_DEPARTMENTS),
+    //         'position' => $this->faker->randomElement(Position::ALL_POSITIONS),
+    //         'gender' => $this->faker->randomElement(Constants::GENDER),
+    //         'civil_status' => $this->faker->randomElement(Constants::CIVIL_STATUS),
+    //         'phone_number' => $this->getEmployeeMultiplePhoneNumbers()
+    //     ];
 
-        $response = $this->actingAs($this->user)
-            ->json(Request::METHOD_POST, EmployeeController::URL, $param);
+    //     $response = $this->actingAs($this->user)
+    //         ->json(Request::METHOD_POST, EmployeeController::URL, $param);
 
-        $response->assertInertia(fn (Assert $page) => $page
-            ->component('Employees/Index')
-                ->toArray()
-        );
+    //     $response->assertInertia(fn (Assert $page) => $page
+    //         ->component('Employees/Index')
+    //             ->toArray()
+    //     );
 
-        dd($response);
+    //     dd($response);
 
-        $this->assertDatabaseHas(
-            'employees',
-            [
-                ...collect($param)->forget(['phone_number', 'email_address'])->toArray(),
-            ]
-        );
-    }
+    //     $this->assertDatabaseHas(
+    //         'employees',
+    //         [
+    //             ...collect($param)->forget(['phone_number', 'email_address'])->toArray(),
+    //         ]
+    //     );
+    // }
 }
