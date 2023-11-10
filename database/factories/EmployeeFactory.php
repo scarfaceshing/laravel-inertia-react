@@ -37,7 +37,6 @@ class EmployeeFactory extends Factory
             'position' => null,
             'gender' => $this->faker->randomElement(Constants::GENDER),
             'civil_status' => $this->faker->randomElement(Constants::CIVIL_STATUS),
-            'deleted_at' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
         ];
     }
 }

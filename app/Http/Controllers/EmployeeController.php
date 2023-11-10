@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Constants\Constants;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 
 class EmployeeController extends Controller
@@ -75,7 +77,7 @@ class EmployeeController extends Controller
             'email_address',
             'address',
             'hired_date',
-            'regularization',
+            'employee_status',
             'department',
             'position',
             'gender',
@@ -93,13 +95,13 @@ class EmployeeController extends Controller
         $append_user = [
             'id_number' => $this->generateIdNumber(),
             'user_id' => $user->id,
-            'employee_status' => true
+            'employee_status' => $employee_details['employee_status']
         ];
 
-        $employee = Employee::create([
-            ...$append_user,
-            ...$employee_details
-        ]);
+        $new_employee_details = Arr::collapse([$employee_details, $append_user]);
+        $new_employee_details = Arr::except($new_employee_details, ['phone_number']);
+
+        $employee = Employee::create($new_employee_details);
 
         collect($employee_details['phone_number'])->each(
             fn ($phone_number) =>
@@ -156,7 +158,8 @@ class EmployeeController extends Controller
         //
     }
 
-    private function generateIdNumber(): string {
+    private function generateIdNumber(): string
+    {
         $id_number = (string) mt_rand(0, 9999);
 
         return $id_number;
