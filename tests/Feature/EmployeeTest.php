@@ -11,12 +11,12 @@ use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Inertia\Testing\AssertableInertia as Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Tests\TestTraits;
-use Illuminate\Support\Facades\Storage;
-use Inertia\Testing\AssertableInertia as Assert;
+use Tests\Utilities\TestStorage;
 
 class EmployeeTest extends TestCase
 {
@@ -73,6 +73,9 @@ class EmployeeTest extends TestCase
 
     public function test_store_employee()
     {
+        $storage = new TestStorage;
+        $image = $storage->generateFakeImage()->resolution();
+
         $param = [
             'first_name' => $this->faker->firstName(),
             'middle_name' => $this->faker->lastName(),
