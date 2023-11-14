@@ -4,28 +4,16 @@ namespace Tests\Utilities;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
 
 class TestStorage
 {
-    private $file;
-    private $name;
+    private const STORAGE_NAME = 'avatar';
 
-    public function __construct()
+    public static function generateFakeImage(?string $file_name = '', ?string $extension = '', ?int $width = 0, ?int $height = 0, ?int $size = 0)
     {
-        $this->name = Str::random(10);
-    }
-
-    public function generateFakeImage()
-    {
-        Storage::fake($this->name);
-        $this->file = UploadedFile::fake();
-        return $this;
-    }
-
-    public function resolution(?int $width = 100, ?int $height = 100)
-    {
-        $this->file->image($this->name, $width, $height);
-        return $this;
+        Storage::fake(self::STORAGE_NAME);
+        $file_name .= '.' . $extension;
+        $file = UploadedFile::fake()->image($file_name, $width, $height)->size($size);
+        return $file;
     }
 }

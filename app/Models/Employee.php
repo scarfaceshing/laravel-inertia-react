@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use App\Models\Image;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Employee extends Model
 {
@@ -34,8 +33,8 @@ class Employee extends Model
         return $this->hasMany(Phone::class);
     }
 
-    public function image(): MorphMany
+    public function image(): MorphOne
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable');
     }
 }

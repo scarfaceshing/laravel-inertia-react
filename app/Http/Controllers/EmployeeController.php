@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\ACL\ACL;
 use App\Http\Requests\EmployeeRequest;
 use App\Models\Employee;
+use App\Models\Image;
 use App\Models\Permission;
 use App\Models\Phone;
 use App\Models\User;
+use App\Utilities\Utilities;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Constants\Constants;
-use Illuminate\Support\Arr;
 use Inertia\Inertia;
+use Tests\Utilities\TestStorage;
 
 class EmployeeController extends Controller
 {
@@ -82,7 +85,8 @@ class EmployeeController extends Controller
             'position',
             'gender',
             'civil_status',
-            'phone_number'
+            'phone_number',
+            'photo'
         );
 
         $user = User::create([
@@ -97,11 +101,26 @@ class EmployeeController extends Controller
             'user_id' => $user->id,
             'employee_status' => $employee_details['employee_status']
         ];
+        
+        // TODO: minimize
+        $photo = $employee_details['photo'];
+        $photo_name = $photo->getClientOriginalName();
+        $photo_extension = $photo->getClientOriginalExtension();
+        $new_photo_name = date('YmdHis') . Str::random(20);
+        dd($new_photo_name);
+        $photo->move(storage_path('app/images/employees'), );
 
         $new_employee_details = Arr::collapse([$employee_details, $append_user]);
-        $new_employee_details = Arr::except($new_employee_details, ['phone_number']);
+        $new_employee_details = Arr::except($new_employee_details, ['phone_number', 'photo']);
 
         $employee = Employee::create($new_employee_details);
+
+        $employee->image()->create([
+            'file_name' => $photo_name,
+            'path' => 'employees' . '/' . $photo_name . '.' . $photo_extension,
+            'extension' => $photo_extension,
+            'is_primary' => true
+        ]);
 
         collect($employee_details['phone_number'])->each(
             fn ($phone_number) =>

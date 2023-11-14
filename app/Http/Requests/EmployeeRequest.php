@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use App\Constants\Constants;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class EmployeeRequest extends FormRequest
 {
@@ -39,6 +41,7 @@ class EmployeeRequest extends FormRequest
             'gender' => ['required', 'in:'.$gender],
             'civil_status' => ['required', 'in:'.$civil_status],
             'phone_number.*.*' => ['required|numeric|digits:10'],
+            'photo' => ['dimensions:min_width=100,min_height=200','mimes:jpeg,bmp,png'],
         ];
     }
 }

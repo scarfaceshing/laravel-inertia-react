@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Tests\TestTraits;
 use Tests\Utilities\TestStorage;
+use Illuminate\Support\Str;
 
 class EmployeeTest extends TestCase
 {
@@ -73,8 +74,9 @@ class EmployeeTest extends TestCase
 
     public function test_store_employee()
     {
-        $storage = new TestStorage;
-        $image = $storage->generateFakeImage()->resolution();
+        $file_name = Str::random(10);
+        $extension = $this->faker->randomElement(['jpeg', 'bmp', 'png']);
+        $image = TestStorage::generateFakeImage($file_name, $extension, 640, 320, 1024);
 
         $param = [
             'first_name' => $this->faker->firstName(),
@@ -89,7 +91,8 @@ class EmployeeTest extends TestCase
             'position' => $this->faker->randomElement(Position::ALL_POSITIONS),
             'gender' => $this->faker->randomElement(Constants::GENDER),
             'civil_status' => $this->faker->randomElement(Constants::CIVIL_STATUS),
-            'phone_number' => $this->getEmployeeMultiplePhoneNumbers()
+            'phone_number' => $this->getEmployeeMultiplePhoneNumbers(),
+            'photo' => $image,
         ];
 
         $response = $this->actingAs($this->user)
@@ -97,7 +100,7 @@ class EmployeeTest extends TestCase
             ->assertStatus(Response::HTTP_FOUND)
             ->assertRedirect(route('employees.index'));
 
-        $assert_employees = Arr::except($param, ['phone_number', 'email_address']);
+        $assert_employees = Arr::except($param, ['phone_number', 'email_address', 'photo']);
 
         $this->assertDatabaseHas(
             'employees',
