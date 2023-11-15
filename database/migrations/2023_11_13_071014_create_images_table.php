@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('file_name')->nullable();
             $table->string('path')->nullable();
             $table->string('extension')->nullable();
-            $table->boolean('is_primary');
+            $table->boolean('is_primary')->default(0);
             $table->morphs('imageable');
             $table->timestamps();
         });

@@ -5,19 +5,24 @@ namespace Tests\Feature;
 use App\Constants\Constants;
 use App\Http\Controllers\EmployeeController;
 use App\Models\Department;
+use App\Models\Employee;
+use App\Models\Image;
 use App\Models\Permission;
 use App\Models\Position;
 use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Testing\AssertableInertia as Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 use Tests\TestTraits;
 use Tests\Utilities\TestStorage;
-use Illuminate\Support\Str;
 
 class EmployeeTest extends TestCase
 {
@@ -94,12 +99,23 @@ class EmployeeTest extends TestCase
             'phone_number' => $this->getEmployeeMultiplePhoneNumbers(),
             'photo' => $image,
         ];
+        
+        $responseData = [];
 
         $response = $this->actingAs($this->user)
+            ->followingRedirects()
             ->json(Request::METHOD_POST, EmployeeController::URL, $param)
-            ->assertStatus(Response::HTTP_FOUND)
-            ->assertRedirect(route('employees.index'));
-
+            ->assertStatus(Response::HTTP_OK)
+            ->assertInertia(
+                function (Assert $page) use (&$responseData) {
+                    $page->component('Employees/Index');
+                    $page->has('data.data', 1);
+                    
+                    $responseData['props'] = $page->toArray()['props']['data']['data'];
+                });
+                
+        $responseData['image'] = Image::where('imageable_id', $responseData['props'][0]['id'])->first()->toArray();
+            
         $assert_employees = Arr::except($param, ['phone_number', 'email_address', 'photo']);
 
         $this->assertDatabaseHas(
@@ -113,6 +129,71 @@ class EmployeeTest extends TestCase
                 'email' => $param['email_address'],
                 'is_active' => 0,
             ]
+        );
+
+        $this->assertDatabaseHas(
+            'images',
+            [
+                'file_name' => $responseData['image']['file_name'],
+                'path' => $responseData['image']['path'],
+                'extension' => $responseData['image']['extension'],
+                'imageable_type' => Employee::class,
+                'imageable_id' => $responseData['props'][0]['id'],
+                'is_primary' => 0
+            ]
+        );
+
+        $employee_photo_file_path = storage_path('app/images/' . $responseData['image']['path']);
+
+        $this->assertFileExists($employee_photo_file_path);
+
+        if (File::exists($employee_photo_file_path)) {
+            File::delete([$employee_photo_file_path]);
+        } else {
+            dd('File does not exist.');
+        }
+    }
+
+    public function test_show_and_edit_employee() {
+        $props = [];
+        $employee = $this->createEmployee();
+
+        $this->actingAs($this->user)
+            ->json(Request::METHOD_GET, EmployeeController::URL . '/' . $employee->id)
+            ->assertStatus(Response::HTTP_OK)
+            ->assertInertia(
+                function (Assert $page) use (&$props) {
+                    $page->component('Employees/Show');
+                    $page->has('data');
+                    $props = $page->toArray()['props']['data'];
+                }
+            );
+        
+        $props = Arr::except($props, ['deleted_at']);
+        $assert_employees = Arr::except($employee->toArray(), ['deleted_at']);
+
+        $this->assertEquals(
+            $props,
+            $assert_employees
+        );
+        
+        $this->actingAs($this->user)
+            ->json(Request::METHOD_GET, EmployeeController::URL . '/' . $employee->id . '/edit')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertInertia(
+                function (Assert $page) use (&$props) {
+                    $page->component('Employees/Edit');
+                    $page->has('data');
+                    $props = $page->toArray()['props']['data'];
+                }
+            );
+        
+        $props = Arr::except($props, ['deleted_at']);
+        $assert_employees = Arr::except($employee->toArray(), ['deleted_at']);
+
+        $this->assertEquals(
+            $props,
+            $assert_employees
         );
     }
 }

@@ -4,8 +4,6 @@ namespace App\Http\Requests;
 
 use App\Constants\Constants;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\File;
 
 class EmployeeRequest extends FormRequest
 {

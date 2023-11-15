@@ -5,19 +5,15 @@ namespace App\Http\Controllers;
 use App\ACL\ACL;
 use App\Http\Requests\EmployeeRequest;
 use App\Models\Employee;
-use App\Models\Image;
 use App\Models\Permission;
 use App\Models\Phone;
 use App\Models\User;
-use App\Utilities\Utilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Tests\Utilities\TestStorage;
 
 class EmployeeController extends Controller
 {
@@ -101,14 +97,13 @@ class EmployeeController extends Controller
             'user_id' => $user->id,
             'employee_status' => $employee_details['employee_status']
         ];
-        
+
         // TODO: minimize
         $photo = $employee_details['photo'];
         $photo_name = $photo->getClientOriginalName();
         $photo_extension = $photo->getClientOriginalExtension();
-        $new_photo_name = date('YmdHis') . Str::random(20);
-        dd($new_photo_name);
-        $photo->move(storage_path('app/images/employees'), );
+        $new_photo_name = date('YmdHis') . Str::random(20) . '.' . $photo_extension;
+        $photo->move(storage_path('app/images/employees'), $new_photo_name);
 
         $new_employee_details = Arr::collapse([$employee_details, $append_user]);
         $new_employee_details = Arr::except($new_employee_details, ['phone_number', 'photo']);
@@ -116,8 +111,8 @@ class EmployeeController extends Controller
         $employee = Employee::create($new_employee_details);
 
         $employee->image()->create([
-            'file_name' => $photo_name,
-            'path' => 'employees' . '/' . $photo_name . '.' . $photo_extension,
+            'file_name' => $new_photo_name,
+            'path' => 'employees' . '/' . $new_photo_name,
             'extension' => $photo_extension,
             'is_primary' => true
         ]);
@@ -154,6 +149,9 @@ class EmployeeController extends Controller
     public function edit(Employee $employee)
     {
         //
+        return Inertia::render('Employees/Show', [
+            'data' => $employee
+        ]);
     }
 
     /**
