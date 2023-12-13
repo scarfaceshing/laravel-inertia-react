@@ -7,7 +7,7 @@ export default function ImageUpload() {
         alt="image description"
       />
 
-      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">
+      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="file_input">
         Upload file
       </label>
       <input
@@ -17,7 +17,7 @@ export default function ImageUpload() {
         type="file"
       />
       <p className="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">
-        JPG
+        JPG, BMP, PNG
       </p>
     </>
   );

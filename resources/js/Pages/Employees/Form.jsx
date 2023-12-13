@@ -7,6 +7,7 @@ import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
 import ImageUpload from '@/Components/ImageUpload';
 import { useEffect } from 'react';
+import { Datepicker } from 'flowbite-react';
 
 export default function Form(props) {
   useEffect(() => console.log(props), []);
@@ -17,12 +18,17 @@ export default function Form(props) {
     lastName: props.data.last_name,
     departments: props.data.departments,
     positions: props.data.positions,
-    civilStatus: props.data.civilStatus,
+    civilStatus: props.data.civil_status,
   });
 
+  function submit(event) {
+    event.preventDefault();
+    console.log(data);
+  }
+
   return (
-    <>
-      <div className="grid justify-center gap-y-4">
+    <form onSubmit={submit}>
+      <div className="grid justify-center gap-y-6">
         <div className="grid place-items-center">
           {/* <InputLabel htmlFor="Image">
             Image<span className="text-red-500 ml-1">&#42;</span>
@@ -49,6 +55,9 @@ export default function Form(props) {
           </InputLabel>
           <TextInput id="lastName" value={data.lastName} onChange={e => setData('lastName', e.target.value)} />
           <InputError message={errors.lastName} />
+        </div>
+        <div>
+          <Datepicker />
         </div>
         <div>
           <InputLabel htmlFor="department">
@@ -125,6 +134,6 @@ export default function Form(props) {
           <PrimaryButton>Submit</PrimaryButton>
         </div>
       </div>
-    </>
+    </form>
   );
 }

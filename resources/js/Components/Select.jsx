@@ -15,6 +15,7 @@ export default function Select({ className, options, handleChange, modifyText = 
 
   return (
     <select onChange={e => handleChange(e.target.value)} className={className}>
+      <option value="">-</option>
       {options.map(option => (
         <option key={option} value={option}>
           {computedText(option)}

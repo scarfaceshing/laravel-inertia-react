@@ -1,4 +1,4 @@
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import BreadCrump from '@/Components/BreadCrump';
 import DynamicTable, { TableHeader } from '@/Components/DynamicTable';
@@ -58,7 +58,7 @@ export default function Index(props) {
       mutate: (value, data) => (
         <div className="grid grid-flow-col auto-cols-max md:auto-cols-min gap-x-2">
           <Link href={route('employees.show', data.id)}>View</Link>
-          <span>Edit</span>
+          <Link href={route('employees.edit', data.id)}>Edit</Link>
           <span>Delete</span>
         </div>
       ),

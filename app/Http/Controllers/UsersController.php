@@ -66,7 +66,7 @@ class UsersController extends Controller
         $user->givePermissionTo($data['permissions']);
         $user->assignRole($data['roles']);
 
-        return to_route('users.index');
+        return redirect()->route('users.index')->with('message', 'Added Successfully');
     }
 
     public function edit(User $user)

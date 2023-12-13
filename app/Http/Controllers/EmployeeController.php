@@ -122,7 +122,7 @@ class EmployeeController extends Controller
             Phone::create([
                 'employee_id' => $employee->id,
                 'phone_number' => $phone_number,
-                'is_active' => true
+                'is_active' => false
             ])
         );
 
@@ -136,6 +136,8 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
+        ACL::allowOnly([Permission::CAN_ACCESS_SHOW_EMPLOYEES]);
+
         return Inertia::render('Employees/Show', [
             'data' => $employee
         ]);
@@ -148,8 +150,9 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        //
-        return Inertia::render('Employees/Show', [
+        ACL::allowOnly([Permission::CAN_ACCESS_EDIT_EMPLOYEES]);
+
+        return Inertia::render('Employees/Edit', [
             'data' => $employee
         ]);
     }
@@ -162,7 +165,43 @@ class EmployeeController extends Controller
      */
     public function update(EmployeeRequest $request, Employee $employee)
     {
-        //
+        ACL::allowOnly([Permission::CAN_UPDATE_EMPLOYEES]);
+
+        $employee_details = $request->only(
+            'first_name',
+            'middle_name',
+            'last_name',
+            'birth_date',
+            'email_address',
+            'address',
+            'hired_date',
+            'employee_status',
+            'department',
+            'position',
+            'gender',
+            'civil_status',
+            'phone_number',
+            'photo'
+        );
+
+        $new_employee_details = Arr::except($employee_details, ['email_address', 'phone_number', 'photo']);
+        Employee::findOrFail($employee->id)->update($new_employee_details);
+
+        if (count($employee_details['phone_number']) > 0) {
+            collect($employee_details['phone_number'])->each(
+                fn ($phone_number) =>
+                Phone::updateOrCreate([
+                    'employee_id' => $employee->id,
+                    'phone_number' => $phone_number,
+                ])
+            );
+        }
+
+        if ($employee_details['photo']) {
+            // TODO: minimize
+        }
+        
+        return redirect()->route('employees.index')->with('message', 'Updated Successfully');
     }
 
     /**

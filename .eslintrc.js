@@ -41,6 +41,8 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'no-console': 2,
+    'no-unused-vars': 'warn',
+    'no-undef': 'warn',
     'sort-imports': [
       'warn',
       {

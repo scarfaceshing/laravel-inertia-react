@@ -45,6 +45,8 @@
   "dependencies": {
     "@inertiajs/inertia-react": "^0.8.1",
     "dayjs": "^1.11.10",
+    "flowbite": "^2.2.0",
+    "flowbite-react": "^0.7.2",
     "nprogress": "^0.2.0"
   }
 }

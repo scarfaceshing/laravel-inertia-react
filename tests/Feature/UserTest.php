@@ -12,11 +12,13 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
+use Tests\TestTraits;
 
 class UserTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
+    use TestTraits;
 
     private $allowed_request_user;
 

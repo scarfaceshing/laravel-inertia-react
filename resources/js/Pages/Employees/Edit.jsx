@@ -4,18 +4,20 @@ import BreadCrump from '@/Components/BreadCrump';
 import Form from '@/Pages/Employees/Form';
 import MainLayout from '@/Layouts/MainLayout';
 
-export default function Create(props) {
+export default function Edit(props) {
   const [form, setForm] = useState({
-    id: '',
-    id_number: '',
-    first_name: '',
-    middle_name: '',
-    last_name: '',
-    birth_date: '',
-    department: '',
-    position: '',
-    gender: '',
-    civil_status: '',
+    id: props.data.id,
+    idNumber: props.data.id_number,
+    firstName: props.data.first_name,
+    middleName: props.data.middle_name,
+    lastName: props.data.last_name,
+    birthDate: props.data.birth_date,
+    hiredDate: props.data.hired_date,
+    employeeStatus: props.data.employee_status,
+    department: props.data.department,
+    position: props.data.position,
+    gender: props.data.gender,
+    civil_status: props.data.civil_status,
   });
 
   return (

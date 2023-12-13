@@ -23,14 +23,22 @@ class Permission extends SpatiePermission
 
  public const CAN_ACCESS_INDEX_EMPLOYEES = 'can_access_index_employees';
  public const CAN_ACCESS_CREATE_EMPLOYEES = 'can_access_create_employees';
+ public const CAN_ACCESS_EDIT_EMPLOYEES = 'can_access_edit_employees';
+ public const CAN_ACCESS_SHOW_EMPLOYEES = 'can_access_show_employees';
+ public const CAN_UPDATE_EMPLOYEES = 'can_update_employees';
  public const CAN_STORE_EMPLOYEES = 'can_store_employees';
+ public const CAN_DELETE_EMPLOYEES = 'can_delete_employees';
 
  public const CAN_ACCESS_INDEX_INFORMATION_TECHNOLOGY = 'can_access_index_information_technology';
 
  public const ALL_PERMISSIONS_HUMAN_RESOURCE = [
      self::CAN_ACCESS_INDEX_EMPLOYEES,
      self::CAN_ACCESS_CREATE_EMPLOYEES,
-     self::CAN_STORE_EMPLOYEES
+     self::CAN_ACCESS_EDIT_EMPLOYEES,
+     self::CAN_ACCESS_SHOW_EMPLOYEES,
+     self::CAN_UPDATE_EMPLOYEES,
+     self::CAN_STORE_EMPLOYEES,
+     self::CAN_DELETE_EMPLOYEES
  ];
 
  public const ALL_PERMISSIONS_INFORMATION_TECHNOLOGY = [
